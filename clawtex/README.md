@@ -1,51 +1,71 @@
-# Clawtex - OpenClaw Deployment Services
+# Clawtex — OpenClaw Deployment Services
 
-**Mission:** Provide turnkey OpenClaw deployment and management services for individuals and companies.
+> **Mission:** Turnkey OpenClaw deployment and management for individuals and companies.
 
-## Team Structure
+---
 
-- **Ayoub** - Director of Operations (Strategy, Customer Success, Escalations)
-- **Carlos** - Security & Monitoring Specialist (Wazuh, hardening, compliance)
-- **Navas** - Infrastructure Architect (VPS provisioning, networking, performance)
-- **Gerson** - Platform Engineer (OpenClaw deployment, channels, skills, troubleshooting)
-- **Web Dev** - Frontend & Payments (Landing page, customer portal, billing)
+## Team
+
+| Role | Owner | Focus |
+|------|-------|-------|
+| Director of Operations | **Ayoub** | Strategy, customer success, escalations |
+| Security & Monitoring | **Carlos** | Wazuh SIEM, hardening, compliance |
+| Infrastructure | **Navas** | VPS provisioning, networking, performance |
+| Platform Engineering | **Gerson** | OpenClaw deployment, channels, skills |
+| Frontend & Payments | **Web Dev** | Landing page, portal, billing |
+
+---
 
 ## Current Status
 
 - ✅ Domain acquired
 - ✅ Landing page & payment system in development
-- ✅ Carlos & Navas VPS deployed (Monday)
+- ✅ Carlos & Navas VPS deployed
 - ✅ Carlos: Wazuh deployed
 - 🆕 Gerson: Onboarding phase
-- 📋 Training roadmap: In progress
-
-## Key Documents
-
-- [Project Structure & Service Tiers](PROJECT_STRUCTURE.md)
-- [Team Training Roadmap](TEAM_TRAINING_ROADMAP.md)
-- [Deployment Runbooks](runbooks/) *(coming soon)*
-- [Customer Onboarding](customer-onboarding/) *(coming soon)*
-
-## Quick Reference
-
-### Weekly Schedule
-- **Monday 10 AM CET:** Team sync (progress, blockers, priorities)
-- **Friday 4 PM CET:** Demo hour (show what you learned/built)
-
-### Communication Channels
-- **#🛠️ops** - Operations, infrastructure, and deployment coordination
-- **#🔒security** - Security alerts, Wazuh monitoring, incident response
-- **#💬support** - Customer support, troubleshooting, escalations
-
-### Service Tiers Overview
-
-| Tier | Price Range | Key Features | Target Customer |
-|------|-------------|--------------|-----------------|
-| 🥉 Bronze | $49-99/mo | Shared infra, 1 channel, 8h support | Individuals, hobbyists |
-| 🥈 Silver | $199-299/mo | Dedicated VPS, 2 channels, 4h support | Small teams, startups |
-| 🥇 Gold | $799-1499/mo | Performance VPS, Wazuh monitoring, unlimited channels, 1h support | Businesses, agencies |
-| 💎 Platinum | $2000+/mo | Multi-region HA, 24/7 support, custom SLA | Enterprise |
+- 📋 Training roadmap in progress
 
 ---
 
-*Last updated: 2026-02-05 02:00 AM CET*
+## Key Documents
+
+| Document | Description |
+|----------|-------------|
+| [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) | Service tiers, tech stack, revenue projections |
+| [TEAM_TRAINING_ROADMAP.md](TEAM_TRAINING_ROADMAP.md) | 6-week specialization plan |
+| [X_BOOKMARKS_STRATEGY.md](X_BOOKMARKS_STRATEGY.md) | Bookmark extraction & organization |
+| [OVERNIGHT_INTENSIVE_SUMMARY.md](OVERNIGHT_INTENSIVE_SUMMARY.md) | Executive summary of planning session |
+| [KICKOFF_AGENDA.md](KICKOFF_AGENDA.md) | Kickoff meeting agenda |
+| [REUNION_KICKOFF_2026_02_05.md](REUNION_KICKOFF_2026_02_05.md) | Kickoff script (Spanish) |
+| `runbooks/` | Deployment runbooks *(coming soon)* |
+| `customer-onboarding/` | Onboarding templates *(coming soon)* |
+
+---
+
+## Weekly Schedule
+
+| Day | Time (CET) | Event |
+|-----|-----------|-------|
+| Monday | 10:00 AM | Team sync — progress, blockers, priorities |
+| Friday | 4:00 PM | Demo hour — show what you learned/built |
+
+## Communication Channels
+
+- **#🛠️ops** — Operations, infrastructure, deployment coordination
+- **#🔒security** — Security alerts, Wazuh monitoring, incident response
+- **#💬support** — Customer support, troubleshooting, escalations
+
+---
+
+## Service Tiers at a Glance
+
+| Tier | Price | Key Features | Target |
+|------|-------|--------------|--------|
+| 🥉 Bronze | $49–99/mo | Shared infra, 1 channel, 8h support | Individuals, hobbyists |
+| 🥈 Silver | $199–299/mo | Dedicated VPS, 2 channels, 4h support | Small teams, startups |
+| 🥇 Gold | $799–1,499/mo | Performance VPS, Wazuh, unlimited channels, 1h support | Businesses, agencies |
+| 💎 Platinum | $2,000+/mo | Multi-region HA, 24/7 support, custom SLA | Enterprise |
+
+---
+
+*Last updated: 2026-02-05*
