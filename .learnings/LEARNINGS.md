@@ -27,3 +27,7 @@
 - **Insight:** Establishing a git baseline immediately means you can always diff/revert changes
 - **Context:** Fresh Mac Mini workspace had all files untracked
 - **Apply when:** Any workspace migration or fresh setup
+
+## 2026-02-08: Discord message splitting annoys Ayoub
+**Issue:** Replies often get split into multiple Discord messages (mid-thought tool calls, separate sections, etc.), making it hard to copy/reply-to.
+**Fix:** Always consolidate into a single reply. Do all tool calls first, then send one complete message. Stay under 2000 chars when possible.
