@@ -1,0 +1,2 @@
+Starting script. Reading /Users/vex/.openclaw/media/inbound/e7fd7788-292a-4587-b2f5-d584aee48305.json
+Loaded 168 items.

@@ -20,3 +20,9 @@
 - **Root cause:** The gateway tool's config.patch action apparently requires `raw` parameter, not `patch`
 - **Fix:** Used `config.apply` with full config instead
 - **Prevention:** Use `config.apply` with complete config JSON for reliable config changes
+
+## 2026-02-09 — exec tool spawn EBADF blocks git status
+- **What happened:** `exec` failed with `spawn EBADF` when running `git status --porcelain` for cron workspace-git-commit
+- **Root cause:** Unknown (exec tool failure)
+- **Fix/workaround:** None yet; previously suggested retry with PTY mode or hard restart
+- **Prevention:** Investigate exec tool stability; document workaround (PTY redirect) in TOOLS.md if confirmed
