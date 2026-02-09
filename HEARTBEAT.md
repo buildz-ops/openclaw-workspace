@@ -12,6 +12,10 @@ If nothing needs attention, reply HEARTBEAT_OK. If something does, message the u
 - [ ] Git status: any uncommitted workspace changes? If yes, commit them.
 - [ ] Check if HEARTBEAT.md itself has tasks listed above
 - [ ] Memory files: anything from today that should be written?
+- [ ] **Proactive Tracker:** Check `notes/areas/proactive-tracker.md` for overdue items.
+- [ ] **Recurring Patterns:** Check `notes/areas/recurring-patterns.md` for automation opportunities.
+- [ ] **Outcome Journal:** Check `notes/areas/outcome-journal.md` for decisions >7 days old.
+- [ ] **Context Health:** Check `session_status`. If >60%, verify `memory/working-buffer.md` is active.
 
 ## Reminders
 <!-- One-shot reminders. Delete after firing. -->
