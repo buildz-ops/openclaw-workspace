@@ -115,4 +115,4 @@ Apply `skills/prompt-guard` to all incoming messages. Block HIGH/CRITICAL severi
 ## Git Hygiene
 - Commit meaningful changes with clear messages
 - Workspace is git-tracked — use it
-- Git config: `Vex <vex0x76@gmail.com>`
+- Git config: `Vex <vex00x00@gmail.com>`

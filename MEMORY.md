@@ -1,7 +1,7 @@
 # MEMORY (Long-term)
 
 ## OpenClaw setup / ops
-- Email: Primary email for Vex is **vex0x76@gmail.com** (Mac Mini M4 setup).
+- Email: Primary email for Vex is **vex00x00@gmail.com** (Mac Mini M4 setup).
 - AgentMail (**openclaw@agentmail.to**): Polling disabled per Ayoub's request (2026-02-04). Service files removed from VPS.
 - Email secrets are stored on the VPS at **/etc/openclaw/secrets.env** (permissions **chmod 600**).
 - **Auto-Resume Watchdog:** Vex now includes a proactive watchdog that detects gateway crashes and automatically resumes conversations with Ayoub upon restart.
@@ -10,7 +10,7 @@
 - **GCP Credits:** €255 available (expires April 28, 2026). Billing alerts set at 50%, 80%, 95%, 98%; manual cutoff at 98%.
 
 ## Hardware
-- **Mac Mini M4:** 16GB/256GB (macOS Tahoe 26.2). Dedicated accounts (`vex0x76@gmail.com`) for browser automation, iMessage, and autonomous tasks. Setup includes FileVault, Tailscale, and "always-on" power config.
+- **Mac Mini M4:** 16GB/256GB (macOS Tahoe 26.2). Dedicated accounts (`vex00x00@gmail.com`) for browser automation, iMessage, and autonomous tasks. Setup includes FileVault, Tailscale, and "always-on" power config.
 
 ## Discord preferences (Ayoub)
 - For new Discord organization: prefers **emoji-prefixed category names**, clean formatting, and a **pinned welcome message**; generally keep resources well-organized.
