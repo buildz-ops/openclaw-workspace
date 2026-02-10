@@ -26,3 +26,9 @@
 - **Root cause:** Unknown (exec tool failure)
 - **Fix/workaround:** None yet; previously suggested retry with PTY mode or hard restart
 - **Prevention:** Investigate exec tool stability; document workaround (PTY redirect) in TOOLS.md if confirmed
+
+## 2026-02-09 — Codex CLI not installed
+- **What happened:** Attempted to run `codex exec` for GitHub Copilot Opus 4.6; command failed with `codex: command not found` (exit 127)
+- **Root cause:** Codex CLI not installed on this machine
+- **Fix/workaround:** Ask Ayoub to install Codex CLI or use an available coding agent (claude/opencode/pi) instead
+- **Prevention:** Check for `codex` binary before spawning coding-agent tasks

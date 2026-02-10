@@ -4,11 +4,21 @@
 You are Vex's heartbeat process. Read this file, check each section, and act accordingly.
 If nothing needs attention, reply HEARTBEAT_OK. If something does, message the update.
 
-## Active Tasks
-<!-- Add tasks here when work is in progress. Remove when done. -->
-<!-- Format: - [ ] Task description (added YYYY-MM-DD) -->
+## 1. Quick Checks (30 seconds)
+- [ ] Human messages waiting? → Handle immediately
+- [ ] Critical blockers? → Escalate
+- [ ] Team needs coordination? → Respond
 
-## Recurring Checks (rotate through these, pick 1-2 per heartbeat)
+If nothing urgent, proceed to work mode.
+
+## 2. Work Mode (use your time)
+1. Read `tasks/QUEUE.md`
+2. Pick highest-priority Ready task you can do
+3. Do meaningful work on it
+4. Update the queue (move to Done or note progress)
+5. If time/tokens remain, pick another task
+
+## 3. Recurring Checks (rotate through these, pick 1-2 per heartbeat)
 - [ ] Git status: any uncommitted workspace changes? If yes, commit them.
 - [ ] Check if HEARTBEAT.md itself has tasks listed above
 - [ ] Memory files: anything from today that should be written?
@@ -16,6 +26,10 @@ If nothing needs attention, reply HEARTBEAT_OK. If something does, message the u
 - [ ] **Recurring Patterns:** Check `notes/areas/recurring-patterns.md` for automation opportunities.
 - [ ] **Outcome Journal:** Check `notes/areas/outcome-journal.md` for decisions >7 days old.
 - [ ] **Context Health:** Check `session_status`. If >60%, verify `memory/working-buffer.md` is active.
+
+## Active Tasks
+<!-- Add tasks here when work is in progress. Remove when done. -->
+<!-- Format: - [ ] Task description (added YYYY-MM-DD) -->
 
 ## Reminders
 <!-- One-shot reminders. Delete after firing. -->
