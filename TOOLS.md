@@ -2,40 +2,22 @@
 
 Skills define *how* tools work. This file is for *your* specifics — the stuff that's unique to your setup.
 
-## What Goes Here
+## Google Workspace (Email, Calendar, Drive, Docs)
+**ALWAYS use the `google-workspace` MCP for Google services.**
+- **DO NOT USE `gog` CLI.** It is deprecated.
+- Email: `mcporter call google-workspace.gmail.send ...`
+- Calendar: `mcporter call google-workspace.calendar.list ...`
+- Drive/Docs/Sheets: Use corresponding `google-workspace.*` tools.
 
-Things like:
-- Camera names and locations
-- SSH hosts and aliases  
-- Preferred voices for TTS
-- Speaker/room names
-- Device nicknames
-- Anything environment-specific
+## Search Preference: Exa
+**ALWAYS use the `exa-search` skill for web searches instead of the native `web_search` tool.**
+- To search: `mcporter call exa.web_search_exa query="..."`
+- To research companies: `mcporter call exa.company_research_exa companyName="..."`
+- To find code: `mcporter call exa.get_code_context_exa query="..."`
+- For deep research: `mcporter call exa.deep_researcher_start instructions="..."`
+- Only fall back to native `web_search` if Exa fails.
 
-## Examples
-
-```markdown
-### Cameras
-- living-room → Main area, 180° wide angle
-- front-door → Entrance, motion-triggered
-
-### SSH
-- home-server → 192.168.1.100, user: admin
-
-### TTS
-- Preferred voice: "Nova" (warm, slightly British)
-- Default speaker: Kitchen HomePod
-```
-
-## Why Separate?
-
-Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
-
----
-
-Add whatever helps you do your job. This is your cheat sheet.
-
-### Exec Workaround (spawn EBADF)
+## Exec Workaround (spawn EBADF)
 If `exec` fails with `spawn EBADF`, use PTY mode with file redirect:
 ```bash
 # Write script to /tmp
@@ -43,9 +25,5 @@ If `exec` fails with `spawn EBADF`, use PTY mode with file redirect:
 # Read output from redirect file
 ```
 
-### browser-use
-- **Location:** `skills/browser-use/.venv/`
-- **Activate:** `source skills/browser-use/.venv/bin/activate`
-- **Usage:** `browser-use open <url>`, `browser-use state`, `browser-use click <index>`
-- **Modes:** `--browser chromium` (default headless), `--browser real` (local Chrome profile)
-- **Always close when done:** `browser-use close`
+## Git Config
+- User: `Vex <vex00x00@gmail.com>`

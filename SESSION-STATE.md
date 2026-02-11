@@ -1,17 +1,18 @@
 # SESSION-STATE.md
 
-## Active Issue: #ai-news No Text Responses (UNRESOLVED)
+## X Account & Newsletter Strategy (2026-02-11)
 
-**Channel:** #🧠ai-news (1466764486286250240)
-**Guild:** 1466038234600444048
-**Symptoms:** @mentions get 👀 ack reaction but NO text response. Other channels work fine.
-**Config:** Wildcard `"*": {"allow": true}` — should cover all channels
-**Models:** Working (proven by DM responses)
-**Restarts tried:** Multiple hot-reload + full restart — no effect
+**Role Shift:** I am the active curator. Ayoub is the consumer.
+- **Goal:** Provide high-signal news/info so Ayoub avoids Twitter doomscrolling.
 
-**Next step:** Check gateway logs for errors when mention arrives in #ai-news. The ack reaction fires but no agent session generates a response. Could be a Discord plugin routing bug or channel-specific session issue.
+**Execution Plan:**
+1. **Finish Seed List:** Complete following the ~44 accounts at a slow, safe pace (avoid flags).
+2. **Maintain Feed:** After seed list, I curate the feed.
+   - Only add high-value/high-signal accounts.
+   - Remove noise if it appears.
+3. **Output:** Use this clean feed to generate the newsletter/updates.
 
-## Config State
-- Primary model: `anthropic/claude-sonnet-4-5` (temporarily switched from Gemini)
-- DM policy: allowlist with Ayoub's ID
-- Main session context: ~76% after restart
+**Status:**
+- Following: ~31 (sticking well).
+- Seed Target: ~44 total.
+- Rate Limits: Clear.

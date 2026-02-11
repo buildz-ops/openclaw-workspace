@@ -20,6 +20,14 @@ uv pip install "browser-use[cli]"
 browser-use install
 ```
 
+## Local Environment
+
+**Venv location:** `skills/browser-use/.venv/`  
+**Activate:** `source skills/browser-use/.venv/bin/activate`  
+**Default mode:** `--browser chromium` (headless)  
+**Local Chrome:** `--browser real` (user's Chrome with cookies/logins)  
+**Always close when done:** `browser-use close`
+
 ## Quick Start
 
 ```bash

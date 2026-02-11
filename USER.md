@@ -7,7 +7,7 @@
 - **Pronouns:** *(optional)*
 - **Timezone:** CET (Europe/Madrid)
 - **Location:** Sabadell, Spain
-- **Notes:** Direct, zero fluff; prefers bullet points + code blocks + raw technical data. No hallucinations; verify state first. VPS: full access granted (including system-wide changes) — still ask before destructive actions and before exposing services publicly. **When Ayoub says `/updatevps`, apply apt updates immediately; only ask for confirmation if a reboot is required.** **When Ayoub sends an OpenClaw/ClawHub skill link, implement it immediately unless he says otherwise** (still ask if it requires credentials or exposing services publicly). Model workflow: Sonnet 4.5 primary; GPT 5.2 / Gemini 3 Pro fallbacks.
+- **Notes:** Prefers bullets, code blocks, raw data. No fluff, no hallucinations. VPS: full access granted (including system-wide changes) — still ask before destructive actions and before exposing services publicly. **When Ayoub says `/updatevps`, apply apt updates immediately; only ask for confirmation if a reboot is required.** **When Ayoub sends an OpenClaw/ClawHub skill link, implement it immediately unless he says otherwise** (still ask if it requires credentials or exposing services publicly). Model: Sonnet 4.5 primary; fallbacks GPT-5.2 → Gemini 3 Pro.
 - **Schedules:** Grocery shopping is a Saturday task.
 
 ## Context
