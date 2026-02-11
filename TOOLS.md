@@ -27,3 +27,22 @@ If `exec` fails with `spawn EBADF`, use PTY mode with file redirect:
 
 ## Git Config
 - User: `Vex <vex00x00@gmail.com>`
+
+## Voice Message Transcription
+When Ayoub sends Discord voice messages, transcribe them using Whisper:
+```bash
+# 1. Download the .ogg file from Discord CDN
+curl -o /tmp/voice.ogg "<discord-cdn-url>"
+
+# 2. Convert to .wav (ffmpeg already installed)
+ffmpeg -i /tmp/voice.ogg -ac 1 -ar 16000 /tmp/voice.wav
+
+# 3. Transcribe using Whisper (install in venv first time)
+python3 -m venv /tmp/whisper-env
+source /tmp/whisper-env/bin/activate
+pip install openai-whisper
+whisper /tmp/voice.ogg --model tiny --output_format txt --output_dir /tmp
+
+# 4. Read the transcription
+cat /tmp/voice-message.txt
+```

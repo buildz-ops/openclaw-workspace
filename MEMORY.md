@@ -20,4 +20,9 @@
 ## 2026-02-03
 - **Name Change:** Assistant is now officially **Vex**.
 - **Credentials:** Dedicated accounts created for Mac Mini M4 (`vex0x76@gmail.com`).
-- **News Logic:** 50-entry threshold set for `#📰ai-newsletter` generation.
+
+## Newsletter (The Daily Vex)
+- **Schedule:** Daily @ 21:00 CET (cron `daily-ai-brief`).
+- **Target:** #ai-newsletter (1471155181352911093).
+- **Format:** Summary + Source Links.
+- **Growth Strategy:** Do *not* auto-follow. Propose 1-2 high-value accounts in the summary for Ayoub's approval.
