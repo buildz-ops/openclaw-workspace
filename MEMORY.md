@@ -25,4 +25,28 @@
 - **Schedule:** Daily @ 21:00 CET (cron `daily-ai-brief`).
 - **Target:** #ai-newsletter (1471155181352911093).
 - **Format:** Summary + Source Links.
+- **X Account:** @vex00x00 (vex00x00@gmail.com) — 44-account seed list complete (2026-02-11). Now in organic curation phase; Ayoub curates feed manually.
 - **Growth Strategy:** Do *not* auto-follow. Propose 1-2 high-value accounts in the summary for Ayoub's approval.
+
+## Mac Mini M4 Setup (2026-02-08)
+- Fresh OpenClaw install via `openclaw configure` (version 2026.2.6-3+)
+- Heartbeat: every 30m using `ollama/llama3.2:3b` (local, $0), active 08:00-23:00 CET, targets #ops
+- Discord: guild `1466038234600444048` allowlisted, DM policy allowlist (owner only)
+- Cron jobs: workspace-git-commit (6h), morning-briefing (08:00 CET), daily-ai-brief (21:00 CET), weekly-clawtex-summary (Fri 18:00 CET)
+
+## Mission Control Dashboard (2026-02-09)
+- Built full Tauri + Next.js dashboard for OpenClaw at `workspace/mission-control/`
+- Dark glassmorphism design, SF Pro fonts, real gateway data
+- Pages: Dashboard, Sessions, Agents, Cron Jobs, Workshop, Journal, API Usage, Documents
+- Two .app builds created: Mac Mini (localhost) + MacBook (Tailscale)
+- Sidebar branded "Vex" with idle/working/offline status
+- **Note:** 1.7 GB build artifacts (node_modules, src-tauri/target) currently in workspace — flagged for cleanup in 2026-02-12 audit
+
+## Self-Audit (2026-02-12)
+- Full introspection run using Opus 4.6
+- Health score: 62/100 (needs attention)
+- Key findings: 2.3 GB workspace bloat, empty task queue, broken Kimi provider, exec security too permissive
+- Immediate cleanup: deleted temp_video/ (35 MB), removed deprecated gog skill, moved clawtex summaries to clawtex/
+
+## Known Issues
+- **#ai-news channel (1466764486286250240):** Gets @mentions (👀 ack) but no text responses spawn. Never worked per Ayoub. Needs full gateway stop/start (not hot-reload) to debug.
