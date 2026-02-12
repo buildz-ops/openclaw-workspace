@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vex Self-Audit Report — 2026-02-12</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --orange: #db6d28;
+  --red: #f85149;
+  --purple: #bc8cff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; line-height: 1.6; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Sidebar */
+nav { width: 260px; background: var(--bg2); border-right: 1px solid var(--border); padding: 20px 0; position: fixed; height: 100vh; overflow-y: auto; }
+nav h2 { padding: 0 20px 16px; font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+nav a { display: block; padding: 8px 20px; color: var(--text-muted); font-size: 13px; transition: all .15s; }
+nav a:hover { color: var(--text); background: var(--bg3); text-decoration: none; }
+nav a.active { color: var(--accent); border-left: 2px solid var(--accent); }
+
+/* Main */
+main { margin-left: 260px; padding: 40px 60px; max-width: 1100px; flex: 1; }
+h1 { font-size: 28px; margin-bottom: 8px; }
+h2 { font-size: 22px; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+h3 { font-size: 16px; margin: 20px 0 8px; color: var(--accent); }
+p, li { margin-bottom: 8px; }
+ul { padding-left: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+th, td { padding: 10px 12px; text-align: left; border: 1px solid var(--border); }
+th { background: var(--bg3); font-weight: 600; color: var(--text); }
+td { background: var(--bg2); }
+code { background: var(--bg3); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+pre { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; margin: 12px 0; }
+pre code { background: none; padding: 0; }
+
+/* Severity badges */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.badge-critical { background: var(--red); color: #fff; }
+.badge-warning { background: var(--orange); color: #fff; }
+.badge-info { background: var(--yellow); color: #000; }
+.badge-healthy { background: var(--green); color: #000; }
+
+/* Health score */
+.health-score { display: flex; align-items: center; gap: 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px 32px; margin: 20px 0; }
+.score-circle { width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; }
+.score-ok { border: 4px solid var(--yellow); color: var(--yellow); }
+
+/* Collapsible */
+details { margin: 12px 0; }
+summary { cursor: pointer; padding: 10px 16px; background: var(--bg3); border-radius: 6px; font-weight: 600; font-size: 14px; }
+summary:hover { background: var(--border); }
+details[open] summary { border-radius: 6px 6px 0 0; }
+details > div { padding: 16px; background: var(--bg2); border: 1px solid var(--border); border-top: none; border-radius: 0 0 6px 6px; }
+
+/* Cards */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 12px 0; }
+.finding { border-left: 4px solid; padding-left: 12px; margin: 12px 0; }
+.finding-critical { border-color: var(--red); }
+.finding-warning { border-color: var(--orange); }
+.finding-info { border-color: var(--yellow); }
+.finding-healthy { border-color: var(--green); }
+
+footer { margin-top: 60px; padding: 20px 0; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <h2>⚡ Vex Audit</h2>
+  <a href="#executive-summary">1. Executive Summary</a>
+  <a href="#workspace">2. Workspace & Files</a>
+  <a href="#system-prompt">3. System Prompt</a>
+  <a href="#memory">4. Memory System</a>
+  <a href="#model">5. Model Configuration</a>
+  <a href="#tools">6. Tools & Skills</a>
+  <a href="#platform">7. Platform Config</a>
+  <a href="#context">8. Context Window</a>
+  <a href="#performance">9. Performance</a>
+  <a href="#security">10. Security</a>
+  <a href="#recommendations">11. Recommendations</a>
+  <a href="#raw">12. Raw Config</a>
+</nav>
+
+<main>
+
+<h1>⚡ Vex Self-Audit Report</h1>
+<p style="color:var(--text-muted)">Generated: 2026-02-12 01:32 CET &nbsp;|&nbsp; Model: anthropic/claude-opus-4-6 &nbsp;|&nbsp; Platform: OpenClaw 2026.2.9</p>
+
+<!-- ============================================================ -->
+<h2 id="executive-summary">1. Executive Summary & Health Score</h2>
+
+<div class="health-score">
+  <div class="score-circle score-ok">62</div>
+  <div>
+    <p><strong>Overall Health: 62/100 — Needs Attention</strong></p>
+    <p style="color:var(--text-muted)">Core functionality is solid. Gateway, Discord, heartbeat, crons, and memory all operational. However, significant disk waste, underutilized systems, stale artifacts, and a few security hygiene items drag the score down.</p>
+  </div>
+</div>
+
+<h3>Top 5 Critical Findings</h3>
+<div class="finding finding-critical">
+  <span class="badge badge-critical">🔴 Critical</span>
+  <strong> 2.3 GB workspace — 2.0 GB is build artifacts & vendored deps</strong>
+  <p><code>mission-control/</code> (1.7 GB including node_modules + Tauri build + .app.zip) and <code>skills/browser-use/.venv/</code> (450 MB) dominate. This bloats git, slows backups, and wastes disk.</p>
+</div>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠 Warning</span>
+  <strong> Task queue is completely empty (template placeholder)</strong>
+  <p><code>tasks/QUEUE.md</code> still contains the original template text with no real tasks. The heartbeat checks it every 30 minutes and finds nothing. The proactive tracker, recurring patterns, and outcome journal are all empty too. The entire proactive system is dormant.</p>
+</div>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠 Warning</span>
+  <strong> Kimi K2.5 provider points to wrong endpoint</strong>
+  <p>Configured baseUrl is <code>api.endpoints.anyscale.com</code> — Anyscale was acquired/deprecated. This provider likely doesn't work. Never validated.</p>
+</div>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠 Warning</span>
+  <strong> exec security: "full" — no restrictions on command execution</strong>
+  <p>Any model (including heartbeat's llama3.2:3b) can run arbitrary shell commands. A prompt injection in a group chat or cron payload could execute destructive commands.</p>
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡 Info</span>
+  <strong> No daily memory file for today (2026-02-12)</strong>
+  <p>Memory system relies on daily files but today's hasn't been created. SESSION-STATE.md is stale (last updated 2026-02-11 about X account strategy).</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="workspace">2. Workspace & File Audit</h2>
+
+<h3>Directory Size Breakdown</h3>
+<table>
+  <tr><th>Directory</th><th>Size</th><th>Status</th></tr>
+  <tr><td><code>mission-control/</code></td><td>1.7 GB</td><td><span class="badge badge-critical">bloat</span></td></tr>
+  <tr><td><code>skills/</code></td><td>540 MB</td><td><span class="badge badge-warning">heavy</span> (450 MB is browser-use .venv)</td></tr>
+  <tr><td><code>temp_video/</code></td><td>35 MB</td><td><span class="badge badge-warning">stale</span> — leftover frames from old task</td></tr>
+  <tr><td><code>clawtex/</code></td><td>1.8 MB</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td><code>memory/</code></td><td>52 KB</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td><code>.learnings/</code></td><td>12 KB</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td><code>notes/</code></td><td>12 KB</td><td><span class="badge badge-info">empty templates</span></td></tr>
+  <tr><td><code>logs/</code></td><td>8 KB</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td><code>config/</code></td><td>4 KB</td><td><span class="badge badge-healthy">ok</span></td></tr>
+</table>
+
+<h3>Identified Issues</h3>
+<ul>
+  <li><span class="badge badge-critical">🔴</span> <code>mission-control/node_modules/</code> (338 MB), <code>src-tauri/</code> (1.3 GB), <code>Mission-Control.app.zip</code> (15 MB) — build artifacts in workspace. Should be in .gitignore or separate repo.</li>
+  <li><span class="badge badge-warning">🟠</span> <code>temp_video/</code> — 43 frame JPGs + video.mp4 from a past task. Should be cleaned up.</li>
+  <li><span class="badge badge-warning">🟠</span> <code>skills/browser-use/.venv/</code> (450 MB) — Python venv vendored in workspace. Standard practice but adds weight.</li>
+  <li><span class="badge badge-info">🟡</span> <code>security-audit-2026-02-08.md</code> — old audit file in workspace root. Should be archived.</li>
+  <li><span class="badge badge-info">🟡</span> <code>memory/security-log.md</code> — empty (0 bytes). prompt-guard logs to here but nothing logged.</li>
+  <li><span class="badge badge-healthy">🟢</span> Git status clean — no uncommitted changes.</li>
+</ul>
+
+<h3>File Count</h3>
+<p>~6,100 files (excluding .git). Most are vendored dependencies in mission-control and browser-use .venv.</p>
+
+<!-- ============================================================ -->
+<h2 id="system-prompt">3. System Prompt Analysis</h2>
+
+<h3>Injected Files (Workspace Context)</h3>
+<table>
+  <tr><th>File</th><th>Size (bytes)</th><th>Est. Tokens</th><th>Notes</th></tr>
+  <tr><td>AGENTS.md</td><td>3,954</td><td>~1,000</td><td>Comprehensive ops guide</td></tr>
+  <tr><td>SOUL.md</td><td>1,443</td><td>~360</td><td>Persona definition</td></tr>
+  <tr><td>TOOLS.md</td><td>1,833</td><td>~460</td><td>Local tool notes</td></tr>
+  <tr><td>IDENTITY.md</td><td>560</td><td>~140</td><td>Minimal</td></tr>
+  <tr><td>USER.md</td><td>1,179</td><td>~295</td><td>User context</td></tr>
+  <tr><td>HEARTBEAT.md</td><td>1,968</td><td>~490</td><td>Heartbeat instructions</td></tr>
+  <tr><td>MEMORY.md</td><td>1,802</td><td>~450</td><td>Long-term memory</td></tr>
+  <tr><td>OPERATING_CONTRACT.md</td><td>1,152</td><td>~290</td><td>Decision authority rules</td></tr>
+  <tr><td>SESSION-STATE.md</td><td>636</td><td>~160</td><td>Active working memory</td></tr>
+  <tr><th>Subtotal (workspace files)</th><th>14,527</th><th>~3,645</th><th></th></tr>
+</table>
+
+<p><strong>OpenClaw system prompt (framework-injected):</strong> Estimated ~8,000–12,000 tokens (tool definitions, runtime instructions, skills list, formatting rules, safety rules, heartbeat protocol, etc.)</p>
+
+<p><strong>Tool schemas:</strong> ~20 tools registered × ~200 tokens each ≈ ~4,000 tokens</p>
+
+<p><strong>Total system prompt estimate: ~18,000–20,000 tokens</strong></p>
+
+<h3>Findings</h3>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>HEARTBEAT.md is injected into every message</strong> — even non-heartbeat sessions pay ~490 tokens for instructions only the heartbeat model uses. Consider moving heartbeat-only instructions to a separate file not in workspace context.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>Redundancy between AGENTS.md, OPERATING_CONTRACT.md, and SOUL.md</strong> — "ask before acting externally" appears in all three. Could consolidate to save ~200 tokens.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> System prompt is well-structured with clear separation of concerns. Total ~20K tokens is reasonable for Opus's 200K context.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="memory">4. Memory System Review</h2>
+
+<h3>Memory Files</h3>
+<table>
+  <tr><th>File</th><th>Size</th><th>Last Modified</th><th>Status</th></tr>
+  <tr><td>2026-01-30.md</td><td>472 B</td><td>Feb 8</td><td><span class="badge badge-info">old</span></td></tr>
+  <tr><td>2026-02-02.md</td><td>2,365 B</td><td>Feb 8</td><td><span class="badge badge-info">old</span></td></tr>
+  <tr><td>2026-02-03.md</td><td>1,033 B</td><td>Feb 8</td><td><span class="badge badge-info">old</span></td></tr>
+  <tr><td>2026-02-05.md</td><td>2,604 B</td><td>Feb 8</td><td><span class="badge badge-info">old</span></td></tr>
+  <tr><td>2026-02-05-clawtex-overnight-summary.md</td><td>4,342 B</td><td>Feb 8</td><td><span class="badge badge-warning">project-specific</span></td></tr>
+  <tr><td>clawtex-overnight-intensive-summary.md</td><td>5,276 B</td><td>Feb 8</td><td><span class="badge badge-warning">stale project artifact</span></td></tr>
+  <tr><td>2026-02-08.md</td><td>1,490 B</td><td>Feb 9</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>2026-02-09.md</td><td>1,330 B</td><td>Feb 10</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>2026-02-10.md</td><td>1,182 B</td><td>Feb 10</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>2026-02-11.md</td><td>1,278 B</td><td>Feb 11</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>security-log.md</td><td>0 B</td><td>Feb 8</td><td><span class="badge badge-warning">empty</span></td></tr>
+  <tr><td>working-buffer.md</td><td>134 B</td><td>Feb 9</td><td><span class="badge badge-info">initialized only</span></td></tr>
+  <tr><th>Total</th><th>21,506 B</th><th></th><th>~5,400 tokens if all loaded</th></tr>
+</table>
+
+<h3>Memory Loading Strategy</h3>
+<ul>
+  <li><strong>Semantic search (memorySearch)</strong> enabled with sources: memory + sessions</li>
+  <li><strong>Session memory</strong> experimental feature enabled</li>
+  <li><strong>Sync:</strong> onSearch=true, watch=false, interval=30min</li>
+  <li><strong>Compaction:</strong> mode=safeguard with memoryFlush enabled</li>
+</ul>
+
+<h3>Findings</h3>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>No memory file for 2026-02-12 (today)</strong> — AGENTS.md says to read today+yesterday's memory files every session start. Today's doesn't exist yet.
+</div>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>Two clawtex-specific summary files</strong> in memory/ — these are project artifacts, not daily logs. Should be in <code>clawtex/</code> or archived.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>working-buffer.md only initialized, never used</strong> — supposed to be active when >60% context. Has never been triggered.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>MEMORY.md not distilled recently</strong> — last content references Feb 3 events. 9 days of daily logs not yet consolidated.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> Memory token cost is minimal (~5.4K total). Semantic search avoids loading all files. Good efficiency.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="model">5. Model Configuration</h2>
+
+<h3>Configured Models</h3>
+<table>
+  <tr><th>Model</th><th>Alias</th><th>Role</th><th>Provider Auth</th><th>Status</th></tr>
+  <tr><td>google/gemini-3-flash-preview</td><td>gemini-flash</td><td><strong>Default primary</strong></td><td>google:default (api_key)</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>google/gemini-3-pro-preview</td><td>gemini</td><td>Fallback #1</td><td>google:default</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>github-copilot/gpt-5.2-codex</td><td>—</td><td>Fallback #2</td><td>github-copilot:github</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>anthropic/claude-haiku-4-5</td><td>—</td><td>Fallback #3</td><td>anthropic:default</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>github-copilot/claude-opus-4.6</td><td>—</td><td>Fallback #4</td><td>github-copilot:github</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>github-copilot/claude-sonnet-4.5</td><td>—</td><td>Fallback #5</td><td>github-copilot:github</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>github-copilot/gpt-5.2</td><td>—</td><td>Fallback #6</td><td>github-copilot:github</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>anthropic/claude-opus-4-6</td><td>opus</td><td>Manual switch</td><td>anthropic:default</td><td><span class="badge badge-healthy">current session</span></td></tr>
+  <tr><td>anthropic/claude-sonnet-4-5</td><td>sonnet</td><td>Manual switch</td><td>anthropic:default</td><td><span class="badge badge-healthy">available</span></td></tr>
+  <tr><td>ollama/llama3.2:3b</td><td>llama</td><td>Heartbeat only</td><td>local (ollama)</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>kimi/kimi-k2.5</td><td>kimi</td><td>Manual switch</td><td>custom API key</td><td><span class="badge badge-critical">likely broken</span></td></tr>
+</table>
+
+<h3>Findings</h3>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>Kimi K2.5 baseUrl points to api.endpoints.anyscale.com</strong> — Anyscale endpoints were deprecated. This model likely fails silently if selected. Should be removed or updated to correct NVIDIA NIM endpoint.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>USER.md says "Sonnet 4.5 primary" but config default is Gemini Flash</strong> — mismatch between documented preference and actual config. Likely intentional (cost optimization) but should be documented.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>6 fallback models configured</strong> — generous redundancy. Good for uptime, but some (github-copilot variants) may have rate limits or latency issues.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> Auth profiles properly configured: 3 providers (Anthropic token, Google API key, GitHub Copilot token). Keys are redacted in config output.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="tools">6. Tools & Skills Inventory</h2>
+
+<h3>Registered Tools (Runtime)</h3>
+<table>
+  <tr><th>Tool</th><th>Purpose</th><th>Status</th></tr>
+  <tr><td>read / write / edit</td><td>File operations</td><td><span class="badge badge-healthy">core, active</span></td></tr>
+  <tr><td>exec / process</td><td>Shell execution & session mgmt</td><td><span class="badge badge-healthy">core, active</span></td></tr>
+  <tr><td>web_search</td><td>Brave search API</td><td><span class="badge badge-info">superseded by Exa</span></td></tr>
+  <tr><td>web_fetch</td><td>URL content extraction</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>browser</td><td>Browser automation</td><td><span class="badge badge-healthy">active (newsletter)</span></td></tr>
+  <tr><td>canvas</td><td>Canvas rendering</td><td><span class="badge badge-info">rarely used</span></td></tr>
+  <tr><td>nodes</td><td>Paired device control</td><td><span class="badge badge-info">no nodes paired</span></td></tr>
+  <tr><td>cron</td><td>Job scheduling</td><td><span class="badge badge-healthy">active, 7 jobs</span></td></tr>
+  <tr><td>message</td><td>Discord messaging</td><td><span class="badge badge-healthy">core, active</span></td></tr>
+  <tr><td>gateway</td><td>Gateway management</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>memory_search / memory_get</td><td>Semantic memory</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>session_status</td><td>Session info</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>sessions_*</td><td>Sub-agent management</td><td><span class="badge badge-healthy">active</span></td></tr>
+  <tr><td>image</td><td>Vision analysis</td><td><span class="badge badge-healthy">available</span></td></tr>
+  <tr><td>tts</td><td>Text-to-speech</td><td><span class="badge badge-info">rarely used</span></td></tr>
+  <tr><td>agents_list</td><td>List spawn targets</td><td><span class="badge badge-healthy">available</span></td></tr>
+</table>
+
+<h3>Installed Skills (Workspace)</h3>
+<table>
+  <tr><th>Skill</th><th>Location</th><th>Status</th></tr>
+  <tr><td>prompt-guard</td><td>workspace/skills/</td><td><span class="badge badge-warning">installed, never triggered</span> (security-log.md empty)</td></tr>
+  <tr><td>agent-autonomy-kit</td><td>workspace/skills/</td><td><span class="badge badge-warning">installed, queue empty</span></td></tr>
+  <tr><td>capability-evolver</td><td>workspace/skills/</td><td><span class="badge badge-info">installed, 1 evolution cycle run</span></td></tr>
+  <tr><td>evolve</td><td>workspace/skills/</td><td><span class="badge badge-info">installed</span></td></tr>
+  <tr><td>exa-search</td><td>workspace/skills/</td><td><span class="badge badge-healthy">active via MCP</span></td></tr>
+  <tr><td>daily-brief</td><td>workspace/skills/</td><td><span class="badge badge-healthy">active via cron</span></td></tr>
+  <tr><td>clawtunes</td><td>workspace/skills/</td><td><span class="badge badge-info">installed</span></td></tr>
+  <tr><td>self-improvement</td><td>workspace/skills/</td><td><span class="badge badge-healthy">active</span> (.learnings/ has content)</td></tr>
+  <tr><td>clawdstrike</td><td>workspace/skills/</td><td><span class="badge badge-info">available</span></td></tr>
+  <tr><td>browser-use</td><td>workspace/skills/</td><td><span class="badge badge-warning">450 MB venv</span></td></tr>
+  <tr><td>proactive-agent</td><td>workspace/skills/</td><td><span class="badge badge-warning">installed, not utilized</span></td></tr>
+  <tr><td>gog (deprecated)</td><td>workspace/skills/</td><td><span class="badge badge-critical">deprecated per TOOLS.md</span></td></tr>
+</table>
+
+<h3>MCP Servers</h3>
+<table>
+  <tr><th>Server</th><th>Type</th><th>Status</th></tr>
+  <tr><td>exa</td><td>HTTP MCP (mcp.exa.ai)</td><td><span class="badge badge-healthy">configured</span></td></tr>
+  <tr><td>google-workspace</td><td>MCP</td><td><span class="badge badge-info">referenced in TOOLS.md but not in mcporter.json</span></td></tr>
+</table>
+
+<h3>Findings</h3>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>google-workspace MCP referenced but not configured</strong> — TOOLS.md says to use it for Gmail/Calendar/Drive, but it's not in <code>config/mcporter.json</code>. Either the MCP is configured elsewhere or this is stale documentation.
+</div>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>gog skill still present despite being deprecated</strong> — TOOLS.md explicitly says "DO NOT USE gog CLI" but the skill files remain in workspace.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>prompt-guard has never logged an event</strong> — either it's not being triggered or group chat threats haven't occurred. The skill exists but seems dormant.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>web_search is superseded by Exa</strong> — per TOOLS.md, Exa should be primary. Native web_search is still registered (provides a useful fallback).
+</div>
+
+<!-- ============================================================ -->
+<h2 id="platform">7. OpenClaw Platform Config</h2>
+
+<h3>Gateway</h3>
+<table>
+  <tr><th>Setting</th><th>Value</th><th>Assessment</th></tr>
+  <tr><td>Version</td><td>2026.2.9 (33c75cb)</td><td><span class="badge badge-healthy">current</span></td></tr>
+  <tr><td>Mode</td><td>local</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>Bind</td><td>loopback (127.0.0.1)</td><td><span class="badge badge-healthy">secure</span></td></tr>
+  <tr><td>Port</td><td>18789</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>Auth</td><td>token-based</td><td><span class="badge badge-healthy">ok</span></td></tr>
+  <tr><td>Tailscale</td><td>off</td><td><span class="badge badge-info">not needed for local</span></td></tr>
+  <tr><td>Update channel</td><td>stable</td><td><span class="badge badge-healthy">ok</span></td></tr>
+</table>
+
+<h3>Discord Channel Config</h3>
+<table>
+  <tr><th>Setting</th><th>Value</th></tr>
+  <tr><td>Enabled</td><td>✅</td></tr>
+  <tr><td>Group policy</td><td>allowlist</td></tr>
+  <tr><td>DM policy</td><td>allowlist (owner only)</td></tr>
+  <tr><td>Guild</td><td>1466038234600444048 (all channels allowed)</td></tr>
+  <tr><td>Allowed users</td><td>281112594348244993 (Ayoub)</td></tr>
+  <tr><td>Ack reaction scope</td><td>group-mentions</td></tr>
+</table>
+
+<h3>Cron Jobs (7 active)</h3>
+<table>
+  <tr><th>Job</th><th>Schedule</th><th>Last Status</th><th>Notes</th></tr>
+  <tr><td>openclaw-watchdog-notify</td><td>every 5m</td><td><span class="badge badge-healthy">ok</span></td><td>Checks for gateway restart flag</td></tr>
+  <tr><td>context-usage-monitor</td><td>every 1h</td><td><span class="badge badge-healthy">ok</span></td><td>Alerts on >80% context</td></tr>
+  <tr><td>workspace-git-commit</td><td>every 6h</td><td><span class="badge badge-healthy">ok</span></td><td>Auto-commits workspace changes</td></tr>
+  <tr><td>morning-briefing</td><td>08:00 CET daily</td><td><span class="badge badge-healthy">ok</span></td><td>Weather + tasks summary</td></tr>
+  <tr><td>daily-health-report</td><td>09:00 CET daily</td><td><span class="badge badge-healthy">ok</span></td><td>Mac Mini system health</td></tr>
+  <tr><td>daily-ai-brief</td><td>21:00 CET daily</td><td><span class="badge badge-healthy">ok</span></td><td>Newsletter from X feed</td></tr>
+  <tr><td>weekly-clawtex-summary</td><td>Fri 18:00 CET</td><td><span class="badge badge-info">not yet run</span></td><td>Weekly project summary</td></tr>
+</table>
+
+<h3>Findings</h3>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> Gateway binding to loopback is correct for local deployment. Token auth enabled.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> Discord allowlist properly restricts to Ayoub only. Group policy is allowlist.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>Watchdog cron runs every 5 minutes</strong> — 288 isolated sessions per day just for gateway health checks. Each uses gemini-flash tokens. Low cost but adds noise.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>weekly-clawtex-summary has never run</strong> — created but next run is future. Will need validation when it fires.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="context">8. Context Window Analysis</h2>
+
+<h3>Budget Breakdown (Opus — 200K context)</h3>
+<table>
+  <tr><th>Component</th><th>Est. Tokens</th><th>% of Context</th></tr>
+  <tr><td>OpenClaw system prompt (framework)</td><td>~10,000</td><td>5%</td></tr>
+  <tr><td>Workspace files (injected)</td><td>~3,645</td><td>1.8%</td></tr>
+  <tr><td>Tool schemas (~20 tools)</td><td>~4,000</td><td>2%</td></tr>
+  <tr><td>Skill descriptions (available_skills)</td><td>~1,500</td><td>0.75%</td></tr>
+  <tr><th>Total system overhead</th><th>~19,145</th><th>~9.6%</th></tr>
+  <tr><td><strong>Available for conversation</strong></td><td><strong>~180,855</strong></td><td><strong>~90.4%</strong></td></tr>
+</table>
+
+<h3>Findings</h3>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> <strong>Excellent context efficiency.</strong> System overhead is under 10%, leaving >180K tokens for conversation. For Opus with 200K context, this is healthy.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>Compaction mode is "safeguard"</strong> — conservative. memoryFlush is enabled, which will dump context to memory files before compacting. Good configuration.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>For Gemini Flash (default model)</strong> — context window is much larger (1M+), so system overhead is negligible. But for llama3.2:3b heartbeat (8K context), the system prompt alone may consume 50%+ of available context.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="performance">9. Performance Assessment</h2>
+
+<h3>Known Failure Modes</h3>
+<ul>
+  <li><strong>exec spawn EBADF</strong> — documented in ERRORS.md. Intermittent, workaround is PTY mode with file redirect. Root cause unknown.</li>
+  <li><strong>Config schema mistakes</strong> — past incident where wrong schema broke gateway. Now documented with "always check config.schema" rule.</li>
+  <li><strong>Watchdog false positives</strong> — resolved by switching from CLI to HTTP health checks.</li>
+</ul>
+
+<h3>.learnings/ System</h3>
+<ul>
+  <li><strong>ERRORS.md:</strong> 6 documented failures with root cause + fix — <span class="badge badge-healthy">excellent practice</span></li>
+  <li><strong>LEARNINGS.md:</strong> 1 behavioral learning (autonomous execution mandate) — <span class="badge badge-info">light but meaningful</span></li>
+  <li><strong>FEATURE_REQUESTS.md:</strong> 1 open request (avatar generation) — <span class="badge badge-info">minimal</span></li>
+</ul>
+
+<h3>Findings</h3>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> Error documentation is thorough. Each incident has root cause, fix, and prevention. Good institutional memory.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>No performance metrics tracked.</strong> No response latency data, no token usage trends, no cost tracking over time. Would benefit from periodic cost/usage logging.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="security">10. Security Review</h2>
+
+<h3>Findings</h3>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>exec security: "full"</strong> — No command restrictions. Any model, including the local llama3.2:3b heartbeat model, can execute arbitrary shell commands. A compromised or confused model could run destructive commands. Consider restricting heartbeat/subagent models to an allowlist.
+</div>
+<div class="finding finding-warning">
+  <span class="badge badge-warning">🟠</span> <strong>Discord wildcard channel access</strong> — <code>"*": {"allow": true}</code> means Vex can read/respond in ALL channels in the guild. If a new public/external channel is created, Vex would have access by default. Consider explicit channel allowlisting.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> <strong>No hardcoded secrets found</strong> — Config shows all sensitive values as <code>__OPENCLAW_REDACTED__</code>. VPS secrets are in <code>/etc/openclaw/secrets.env</code> with chmod 600.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> <strong>Gateway binds to loopback only</strong> — not exposed to network. Token auth required for API access.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> <strong>DM policy is allowlist</strong> — only Ayoub can DM the bot. Group policy is also allowlist with one guild.
+</div>
+<div class="finding finding-healthy">
+  <span class="badge badge-healthy">🟢</span> <strong>Owner commands restricted</strong> — <code>ownerAllowFrom: ["discord:281112594348244993"]</code> limits admin commands to Ayoub's account.
+</div>
+<div class="finding finding-info">
+  <span class="badge badge-info">🟡</span> <strong>prompt-guard skill exists but has never logged an event</strong> — Either not being invoked on incoming messages, or no threats have occurred. Should verify it's actually in the processing pipeline.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="recommendations">11. Prioritized Recommendations</h2>
+
+<h3>🔴 High Impact</h3>
+<ol>
+  <li><strong>Clean up workspace bloat</strong> — Move <code>mission-control/</code> to a separate repo or add <code>node_modules/</code>, <code>src-tauri/target/</code>, and <code>.app.zip</code> to .gitignore. Delete <code>temp_video/</code>. Saves ~2 GB. This is the single biggest win.</li>
+  <li><strong>Fix or remove Kimi K2.5 provider</strong> — Update baseUrl to correct NVIDIA NIM endpoint, or remove if not needed. Dead providers in fallback chains cause confusing failures.</li>
+  <li><strong>Restrict exec security for non-primary models</strong> — At minimum, heartbeat model (llama:3b) should not have unrestricted exec access. Check if OpenClaw supports per-model tool restrictions.</li>
+</ol>
+
+<h3>🟠 Medium Impact</h3>
+<ol start="4">
+  <li><strong>Populate task queue</strong> — The entire proactive system (agent-autonomy-kit, heartbeat task processing, proactive-tracker) is dormant because QUEUE.md is empty. Either use it or remove the overhead.</li>
+  <li><strong>Distill MEMORY.md</strong> — 9 days of daily logs haven't been consolidated. Run a memory distillation pass to keep long-term memory current.</li>
+  <li><strong>Remove deprecated gog skill</strong> — Still present in workspace despite being superseded by google-workspace MCP.</li>
+  <li><strong>Verify google-workspace MCP is actually configured</strong> — Referenced in TOOLS.md but absent from mcporter.json. Either add it or update docs.</li>
+  <li><strong>Narrow Discord channel permissions</strong> — Replace wildcard <code>*</code> with explicit channel list to prevent accidental access to future channels.</li>
+</ol>
+
+<h3>🟡 Low Impact / Nice-to-Have</h3>
+<ol start="9">
+  <li><strong>Move clawtex summaries out of memory/</strong> — <code>clawtex-overnight-intensive-summary.md</code> and <code>2026-02-05-clawtex-overnight-summary.md</code> are project artifacts, not daily logs.</li>
+  <li><strong>Create today's memory file</strong> — <code>memory/2026-02-12.md</code> should be initialized.</li>
+  <li><strong>Consider reducing watchdog cron frequency</strong> — Every 5 minutes is aggressive. Every 15 minutes would reduce isolated session count by 75% with minimal risk increase.</li>
+  <li><strong>Add cost/usage tracking</strong> — Periodic logging of token usage and costs to spot trends and budget overruns.</li>
+  <li><strong>Document model mismatch</strong> — USER.md says "Sonnet 4.5 primary" but config uses Gemini Flash. Add a note explaining the intentional discrepancy.</li>
+  <li><strong>Generate avatar</strong> — IDENTITY.md still has placeholder. Open feature request since Feb 8.</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="raw">12. Raw Configuration Reference</h2>
+
+<details>
+  <summary>openclaw.json (gateway config)</summary>
+  <div>
+<pre><code>{
+  "meta": {
+    "lastTouchedVersion": "2026.2.9",
+    "lastTouchedAt": "2026-02-11T14:48:37.838Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-09T15:15:23.541Z",
+    "lastRunVersion": "2026.2.6-3",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "update": { "channel": "stable", "checkOnStart": true },
+  "auth": {
+    "profiles": {
+      "anthropic:default": { "provider": "anthropic", "mode": "token" },
+      "github-copilot:github": { "provider": "github-copilot", "mode": "token" },
+      "google:default": { "provider": "google", "mode": "api_key" }
+    }
+  },
+  "models": {
+    "providers": {
+      "ollama": {
+        "baseUrl": "http://localhost:11434/v1",
+        "api": "openai-completions",
+        "models": [{
+          "id": "llama3.2:3b",
+          "contextWindow": 8192,
+          "maxTokens": 4096
+        }]
+      },
+      "kimi": {
+        "baseUrl": "https://api.endpoints.anyscale.com/v1",
+        "apiKey": "[REDACTED]",
+        "api": "openai-completions",
+        "models": [{
+          "id": "kimi-k2.5",
+          "contextWindow": 256000,
+          "maxTokens": 8192
+        }]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "google/gemini-3-flash-preview",
+        "fallbacks": [
+          "google/gemini-3-pro-preview",
+          "github-copilot/gpt-5.2-codex",
+          "anthropic/claude-haiku-4-5",
+          "github-copilot/claude-opus-4.6",
+          "github-copilot/claude-sonnet-4.5",
+          "github-copilot/gpt-5.2"
+        ]
+      },
+      "workspace": "/Users/vex/.openclaw/workspace",
+      "memorySearch": {
+        "enabled": true,
+        "sources": ["memory", "sessions"],
+        "experimental": { "sessionMemory": true },
+        "sync": { "onSearch": true, "watch": false, "intervalMinutes": 30 }
+      },
+      "compaction": { "mode": "safeguard", "memoryFlush": { "enabled": true } },
+      "heartbeat": {
+        "every": "30m",
+        "activeHours": { "start": "08:00", "end": "23:00", "timezone": "Europe/Madrid" },
+        "model": "ollama/llama3.2:3b",
+        "target": "discord",
+        "to": "1466740021431369808"
+      },
+      "maxConcurrent": 4,
+      "subagents": { "maxConcurrent": 8 }
+    }
+  },
+  "tools": { "exec": { "security": "full" } },
+  "messages": { "ackReactionScope": "group-mentions" },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerAllowFrom": ["discord:281112594348244993"]
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": "[REDACTED]",
+      "groupPolicy": "allowlist",
+      "dm": { "policy": "allowlist", "allowFrom": ["281112594348244993"] },
+      "guilds": {
+        "1466038234600444048": {
+          "users": ["281112594348244993"],
+          "channels": { "*": { "allow": true } }
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": { "mode": "token", "token": "[REDACTED]" },
+    "tailscale": { "mode": "off" }
+  },
+  "plugins": { "entries": { "discord": { "enabled": true } } }
+}</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary>config/mcporter.json</summary>
+  <div>
+<pre><code>{
+  "mcpServers": {
+    "exa": {
+      "baseUrl": "https://mcp.exa.ai/mcp?tools=web_search_exa,web_search_advanced_exa,get_code_context_exa,crawling_exa,company_research_exa,people_search_exa,deep_researcher_start,deep_researcher_check"
+    }
+  },
+  "imports": []
+}</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary>SESSION-STATE.md</summary>
+  <div>
+<pre><code># SESSION-STATE.md
+
+## X Account & Newsletter Strategy (2026-02-11)
+
+**Role Shift:** I am the active curator. Ayoub is the consumer.
+- **Goal:** Provide high-signal news/info so Ayoub avoids Twitter doomscrolling.
+
+**Execution Plan:**
+1. **Finish Seed List:** Complete following the ~44 accounts at a slow, safe pace.
+2. **Maintain Feed:** After seed list, I curate the feed.
+3. **Output:** Use this clean feed to generate the newsletter/updates.
+
+**Status:**
+- Following: ~31 (sticking well).
+- Seed Target: ~44 total.
+- Rate Limits: Clear.</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary>.learnings/ERRORS.md</summary>
+  <div>
+<pre><code>## 2026-02-08 — Discord /model command unauthorized
+  Fix: Added user ID to guilds.*.users[] and commands.ownerAllowFrom
+
+## 2026-02-08 — config.patch returns "raw required"
+  Fix: Use config.apply with full config instead
+
+## 2026-02-09 — exec tool spawn EBADF
+  Root cause: Unknown. Workaround: PTY mode with file redirect
+
+## 2026-02-09 — Config broke gateway: wrong schema for sessionMemory
+  Fix: Always run config.schema before changes
+
+## 2026-02-09 — Watchdog false positives
+  Fix: Switched to curl HTTP health check
+
+## 2026-02-09 — Codex CLI not installed
+  Status: Unresolved</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary>Cron Jobs Summary</summary>
+  <div>
+<pre><code>1. openclaw-watchdog-notify  | every 5m    | isolated | checks gateway restart flag
+2. context-usage-monitor     | every 1h    | isolated | alerts on >80% context
+3. workspace-git-commit      | */6h cron   | isolated | auto-commits workspace
+4. morning-briefing          | 08:00 CET   | isolated | weather + tasks + yesterday
+5. daily-health-report       | 09:00 CET   | isolated | Mac Mini system health
+6. daily-ai-brief            | 21:00 CET   | isolated | X feed newsletter
+7. weekly-clawtex-summary    | Fri 18:00   | isolated | project status update</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary>Workspace File Tree (non-vendored)</summary>
+  <div>
+<pre><code>./SESSION-STATE.md
+./tasks/QUEUE.md
+./memory/2026-01-30.md ... 2026-02-11.md (10 daily files)
+./memory/working-buffer.md
+./memory/security-log.md
+./memory/clawtex-overnight-intensive-summary.md
+./config/mcporter.json
+./IDENTITY.md
+./OPERATING_CONTRACT.md
+./HEARTBEAT.md
+./MEMORY.md
+./SOUL.md
+./USER.md
+./AGENTS.md
+./TOOLS.md
+./security-audit-2026-02-08.md
+./logs/openclaw-watchdog.{log,err,out}
+./notes/areas/{outcome-journal,proactive-tracker,recurring-patterns}.md
+./clawtex/ (project files + bookmarks)
+./scripts/openclaw-watchdog.sh
+./skills/{prompt-guard,agent-autonomy-kit,capability-evolver,evolve,exa-search,daily-brief,clawtunes,self-improvement,clawdstrike,browser-use,proactive-agent,gog}/
+./.learnings/{ERRORS,LEARNINGS,FEATURE_REQUESTS}.md
+./mission-control/ (Next.js + Tauri app — 1.7 GB)
+./temp_video/ (35 MB — stale frames)</code></pre>
+  </div>
+</details>
+
+<footer>
+  <p>⚡ Vex Self-Audit Report — Generated 2026-02-12 01:32 CET — Model: anthropic/claude-opus-4-6 — OpenClaw 2026.2.9</p>
+  <p>Audited by: Vex (self-introspection) | Blind spots: Cannot inspect runtime memory, actual API key validity, or network-level security.</p>
+</footer>
+
+</main>
+</body>
+</html>
