@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac Status Board</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Apple Logo Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+    <style>
+        /* Loading Overlay */
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+        #loading { display: flex; justify-content: center; align-items: center; height: 100vh; font-size: 1.2rem; opacity: 0.7; }
+        
+        /* Icon styles */
+        .nav-icon { margin-right: 12px; width: 24px; text-align: center; display: inline-block; }
+        .fa-apple { font-size: 1.4rem; margin-right: 8px; }
+    </style>
+</head>
+<body>
+
+<div id="loading">
+    <i class="fas fa-spinner fa-spin"></i> &nbsp; Connecting to Mac Mini...
+</div>
+
+<div id="app" class="glass-container" style="display: none;">
+    <!-- Sidebar -->
+    <nav class="sidebar glass-panel">
+        <div class="brand">
+            <i class="fab fa-apple"></i> <span class="brand-text">Status Board</span>
+        </div>
+        <ul class="nav-links">
+            <li class="active" onclick="switchTab('overview')"><i class="fas fa-tachometer-alt nav-icon"></i> Overview</li>
+            <li onclick="switchTab('cpu')"><i class="fas fa-microchip nav-icon"></i> CPU</li>
+            <li onclick="switchTab('memory')"><i class="fas fa-memory nav-icon"></i> Memory</li>
+            <li onclick="switchTab('storage')"><i class="fas fa-hdd nav-icon"></i> Storage</li>
+            <li onclick="switchTab('network')"><i class="fas fa-globe nav-icon"></i> Network</li>
+        </ul>
+        <div class="footer-status">
+            <div class="status-dot online"></div> Connected
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content-area">
+        
+        <!-- Tab: Overview -->
+        <section id="overview" class="tab-content active">
+            <h1 class="page-title">System Overview</h1>
+            <div class="grid-layout">
+                <!-- Row 1 -->
+                <div class="card glass-card span-2">
+                    <h2>Mac Mini M4</h2>
+                    <div class="stat-row">
+                        <span class="label">OS Version</span>
+                        <span class="value" id="os-distro">macOS ...</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Kernel</span>
+                        <span class="value" id="os-release">...</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Uptime</span>
+                        <span class="value" id="os-uptime">--:--:--</span>
+                    </div>
+                </div>
+                
+                <div class="card glass-card">
+                    <h2>CPU Load</h2>
+                    <div class="chart-container-sm">
+                        <canvas id="cpu-mini-chart"></canvas>
+                    </div>
+                    <div class="big-number" id="cpu-load-mini">0%</div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="card glass-card">
+                    <h2>Memory</h2>
+                    <div class="chart-container-sm">
+                        <canvas id="mem-mini-chart"></canvas> 
+                    </div>
+                    <div class="big-number" id="mem-percent-mini">0%</div>
+                </div>
+
+                <div class="card glass-card">
+                    <h2>Storage</h2>
+                    <div class="stat-row">
+                         <span class="label">Main Disk</span>
+                         <span class="value" id="storage-main-percent">--% Used</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="storage-main-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="card glass-card">
+                    <h2>Network Activity</h2>
+                    <div class="stat-row">
+                        <span class="label">Active IP</span>
+                        <span class="value" id="net-primary-ip-mini" style="font-size: 0.9em;">--</span>
+                    </div>
+                    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                        <div>
+                            <div class="label" style="font-size: 0.7em;">Download</div>
+                            <div id="net-down-mini" style="font-size: 1.1rem; font-weight: 600;">0 KB/s</div>
+                        </div>
+                        <div>
+                            <div class="label" style="font-size: 0.7em;">Upload</div>
+                            <div id="net-up-mini" style="font-size: 1.1rem; font-weight: 600;">0 KB/s</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: CPU -->
+        <section id="cpu" class="tab-content">
+            <h1 class="page-title">Processor</h1>
+            <div class="card glass-card span-full">
+                <h2>Real-time Load History</h2>
+                <div class="chart-container-lg">
+                    <canvas id="cpu-main-chart"></canvas>
+                </div>
+            </div>
+            <div class="grid-layout-3">
+                <div class="card glass-card">
+                    <h3>Temperature</h3>
+                    <div class="big-number" id="cpu-temp">--°C</div>
+                    <div class="label" style="margin-top:5px; font-size: 0.8rem;">Core Package (Root Req)</div>
+                </div>
+                <div class="card glass-card">
+                    <h3>Active Cores</h3>
+                    <div class="big-number" id="cpu-cores">--</div>
+                </div>
+                <div class="card glass-card">
+                    <h3>Base Clock</h3>
+                    <div class="big-number" id="cpu-speed">-- GHz</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Memory -->
+        <section id="memory" class="tab-content">
+            <h1 class="page-title">Memory</h1>
+            <div class="grid-layout">
+                <div class="card glass-card span-2">
+                    <h2>Usage History</h2>
+                    <div class="chart-container-lg">
+                        <canvas id="mem-history-chart"></canvas>
+                    </div>
+                </div>
+                <div class="card glass-card">
+                    <h2>Breakdown</h2>
+                    <div class="stat-row">
+                        <span class="label">Total Installed</span>
+                        <span class="value" id="mem-total">-- GB</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Active</span>
+                        <span class="value" id="mem-used">-- GB</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Available</span>
+                        <span class="value" id="mem-free">-- GB</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="mem-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Storage -->
+        <section id="storage" class="tab-content">
+            <h1 class="page-title">Storage Volumes</h1>
+            <div id="disk-container" class="grid-layout-2">
+                <!-- Dynamically filled -->
+            </div>
+        </section>
+
+        <!-- Tab: Network -->
+        <section id="network" class="tab-content">
+            <h1 class="page-title">Network Interfaces</h1>
+            
+            <!-- Latency Card -->
+            <div class="card glass-card span-full" style="margin-bottom: 20px;">
+                <div class="grid-layout-3">
+                     <div>
+                        <h3>Internet Ping (Google)</h3>
+                        <div class="big-number" id="net-ping">-- ms</div>
+                     </div>
+                     <div class="span-2">
+                        <h3>Active Connection</h3>
+                        <div class="stat-row"><span class="label">Primary Interface</span><span class="value" id="net-primary-iface">--</span></div>
+                        <div class="stat-row"><span class="label">Primary IP</span><span class="value" id="net-primary-ip">--</span></div>
+                     </div>
+                </div>
+            </div>
+
+            <div id="network-container" class="grid-layout">
+                <!-- Dynamically filled -->
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

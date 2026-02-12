@@ -1,0 +1,203 @@
+/* CSS Variables */
+:root {
+    --bg-color: #0d0d0d;
+    --text-color: #f0f0f0;
+    --accent-color: #007aff; /* Apple Blue */
+    --accent-hover: #0056b3;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --blur-amount: 20px;
+    --card-radius: 16px;
+    --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Reset & Base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-stack);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top left, #1a1a1a, #000000);
+}
+
+/* Glass Container (App Wrapper) */
+.glass-container {
+    width: 90vw;
+    height: 90vh;
+    background: rgba(20, 20, 20, 0.6);
+    border-radius: var(--card-radius);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border: var(--glass-border);
+    display: flex;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.02);
+    border-right: var(--glass-border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.9;
+}
+
+.nav-links { list-style: none; padding: 0; }
+.nav-links li {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+.nav-links li:hover {
+    background: rgba(255, 255, 255, 0.05);
+    opacity: 1;
+}
+.nav-links li.active {
+    background: var(--accent-color);
+    color: white;
+    opacity: 1;
+    font-weight: 500;
+}
+
+.footer-status {
+    margin-top: auto;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; }
+.status-dot.offline { background: #e74c3c; }
+
+/* Main Content Area */
+.content-area {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+/* Grid Layouts */
+.grid-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-layout-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid-layout-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.span-2 { grid-column: span 2; }
+.span-full { grid-column: 1 / -1; }
+
+/* Glass Cards */
+.glass-card {
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-card h2 { font-size: 1.1rem; font-weight: 500; margin-bottom: 15px; opacity: 0.8; }
+.glass-card h3 { font-size: 0.9rem; font-weight: 500; margin-bottom: 5px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Stats & Data */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.stat-row:last-child { border-bottom: none; margin-bottom: 0; }
+.label { opacity: 0.6; font-size: 0.9rem; }
+.value { font-weight: 500; font-family: monospace; }
+
+.big-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Charts */
+.chart-container-sm { height: 150px; position: relative; width: 100%; }
+.chart-container-lg { height: 300px; position: relative; width: 100%; }
+
+/* Progress Bars */
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+.progress-bar {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .glass-container { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+    .grid-layout, .grid-layout-3 { grid-template-columns: 1fr; }
+    .span-2 { grid-column: span 1; }
+    .sidebar { width: 70px; padding: 10px; align-items: center; }
+    .brand span, .nav-links li { display: none; } /* Hide text, show icons if added later */
+    .brand .logo { display: block; font-size: 1.5rem; margin: 0; }
+    .nav-links li { display: block; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+    .nav-links li::before { content: ''; width: 20px; height: 20px; background: currentColor; mask-size: contain; mask-repeat: no-repeat; mask-position: center; }
+    /* Simple fallback for mobile nav text visibility if icons aren't used */
+    .nav-links li { font-size: 0.7rem; text-align: center; white-space: nowrap; overflow: hidden; }
+}
