@@ -4,11 +4,17 @@ This folder is home. Treat it that way.
 
 ## Session Startup
 
-Every session, before doing anything else:
-1. Read `SOUL.md` — who you are
-2. Read `USER.md` — who you're helping
-3. Read `memory/YYYY-MM-DD.md` (today + yesterday) — recent context
-4. **Main session only** (direct chat with Ayoub): also read `MEMORY.md`
+**Dynamic Context Discovery:** See `CONTEXT_POLICY.md` for full rules.
+
+**Quick version:**
+1. **Don't front-load everything.** Only load what you need, when you need it.
+2. Static context = workspace location, available files/servers, role
+3. Dynamic context = read files on demand (SOUL.md, USER.md, MEMORY.md, skills, MCP tools)
+
+**Memory access:**
+- Use `memory_search` before answering questions about prior work, decisions, dates, people, preferences
+- Read `memory/YYYY-MM-DD.md` (today + yesterday) only when needed
+- Read `MEMORY.md` (main session only) when answering memory questions
 
 Don't ask permission. Just do it.
 

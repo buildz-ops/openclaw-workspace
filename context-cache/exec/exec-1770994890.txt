@@ -1,0 +1,17 @@
+total 0
+drwxr-xr-x@ 16 vex  staff  512 Feb 12 13:11 .
+drwxr-xr-x  29 vex  staff  928 Feb 13 16:00 ..
+drwxr-xr-x   6 vex  staff  192 Feb  9 20:15 agent-autonomy-kit
+drwxr-xr-x   5 vex  staff  160 Feb  9 08:20 browser-use
+drwxr-xr-x  15 vex  staff  480 Feb  9 16:52 capability-evolver
+drwxr-xr-x@  6 vex  staff  192 Feb  7 17:45 clawdstrike
+drwxr-xr-x@  4 vex  staff  128 Feb  7 17:45 clawtunes
+drwxr-xr-x   4 vex  staff  128 Feb 11 22:28 daily-brief
+drwxr-xr-x   3 vex  staff   96 Feb  9 16:50 evolve
+drwxr-xr-x   4 vex  staff  128 Feb 11 10:00 exa-search
+drwxr-xr-x   3 vex  staff   96 Feb  9 07:51 proactive-agent
+drwxr-xr-x@ 10 vex  staff  320 Feb  7 17:45 prompt-guard
+drwxr-xr-x@  4 vex  staff  128 Feb  7 17:45 qmd-skill-2
+drwxr-xr-x   6 vex  staff  192 Feb  9 20:22 reddit-readonly
+drwxr-xr-x@  6 vex  staff  192 Feb  7 17:45 self-improvement
+drwxr-xr-x   3 vex  staff   96 Feb 10 11:04 x-bookmarks
