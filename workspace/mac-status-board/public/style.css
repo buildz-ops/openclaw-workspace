@@ -119,6 +119,7 @@ body {
 .grid-layout-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 .grid-layout-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; } /* Added explicit span-3 */
 .span-full { grid-column: 1 / -1; }
 
 /* Glass Cards */
@@ -163,8 +164,8 @@ body {
 }
 
 /* Charts */
-.chart-container-sm { height: 150px; position: relative; width: 100%; }
-.chart-container-lg { height: 300px; position: relative; width: 100%; }
+.chart-container-sm { height: 150px; position: relative; width: 100%; margin-bottom: 10px; }
+.chart-container-lg { height: 300px; position: relative; width: 100%; margin-bottom: 20px; }
 
 /* Progress Bars */
 .progress-bar-container {
@@ -192,7 +193,7 @@ body {
 @media (max-width: 1024px) {
     .glass-container { width: 100vw; height: 100vh; border-radius: 0; border: none; }
     .grid-layout, .grid-layout-3 { grid-template-columns: 1fr; }
-    .span-2 { grid-column: span 1; }
+    .span-2, .span-3 { grid-column: span 1; }
     .sidebar { width: 70px; padding: 10px; align-items: center; }
     .brand span, .nav-links li { display: none; } /* Hide text, show icons if added later */
     .brand .logo { display: block; font-size: 1.5rem; margin: 0; }

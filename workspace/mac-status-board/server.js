@@ -24,21 +24,48 @@ function getPing() {
 // Helper: CPU Temp (Try CLI)
 function getCpuTemp() {
     return new Promise((resolve) => {
-        exec('osx-cpu-temp', (error, stdout, stderr) => {
-            if (error || !stdout) {
-                resolve(null);
-                return;
+        // Try osx-cpu-temp
+        exec('osx-cpu-temp', (error, stdout) => {
+            if (!error && stdout) {
+                const temp = parseFloat(stdout.replace('°C', '').trim());
+                if (temp > 0) {
+                    resolve(temp);
+                    return;
+                }
             }
-            // "50.5 °C"
-            const temp = parseFloat(stdout.replace('°C', '').trim());
-            resolve(temp === 0 ? null : temp); // 0.0 usually means failure on Silicon
+            resolve(null);
+        });
+    });
+}
+
+// Helper: Thermal Pressure (Robust)
+function getThermalPressure() {
+    return new Promise((resolve) => {
+        // 1. Try sysctl (Full Path)
+        exec('/usr/sbin/sysctl -n machdep.xcpm.cpu_thermal_level', (error, stdout) => {
+            if (!error && stdout) {
+                const level = stdout.trim();
+                if (level === '0') { resolve("Normal"); return; }
+                if (level === '1') { resolve("Fair"); return; }
+                if (level === '2') { resolve("Serious"); return; }
+                if (level === '3') { resolve("Critical"); return; }
+            }
+
+            // 2. Fallback: pmset (Power Management)
+            exec('/usr/bin/pmset -g therm', (err, out) => {
+                if (!err && out.includes("No thermal warning level has been recorded")) {
+                    resolve("Normal");
+                } else {
+                    resolve("Unknown");
+                }
+            });
         });
     });
 }
 
 async function getStats() {
     try {
-        const [cpu, mem, disk, netStats, netIfaces, osInfo, cpuInfo, ping] = await Promise.all([
+        const [cpu, mem, disk, netStats, netIfaces, osInfo, cpuInfo, ping, thermal] = await Promise.all([
             si.currentLoad(),
             si.mem(),
             si.fsSize(),
@@ -46,7 +73,8 @@ async function getStats() {
             si.networkInterfaces(),
             si.osInfo(),
             si.cpu(),
-            getPing()
+            getPing(),
+            getThermalPressure()
         ]);
 
         let tempMain = await getCpuTemp();
@@ -69,14 +97,15 @@ async function getStats() {
             };
         });
 
-        // Identify primary interface (not internal, has IP)
+        // Identify primary interface
         const primaryNet = detailedNetwork.find(n => n.ip4 !== 'N/A' && n.ip4 !== '127.0.0.1' && !n.iface.startsWith('lo')) || detailedNetwork[0];
 
         return {
             cpu: {
                 load: cpu.currentLoad.toFixed(1),
                 cores: cpu.cpus.map(c => c.load.toFixed(1)),
-                temp: tempMain || "N/A", // Show string if null
+                temp: tempMain, 
+                thermal: thermal,
                 info: `${cpuInfo.manufacturer} ${cpuInfo.brand} @ ${cpuInfo.speed}GHz`
             },
             mem: {
@@ -93,7 +122,7 @@ async function getStats() {
                 percent: d.use.toFixed(1)
             })),
             network: detailedNetwork,
-            primaryNet: primaryNet, // Send identified primary for Overview
+            primaryNet: primaryNet,
             ping: ping,
             os: {
                 hostname: os.hostname(),

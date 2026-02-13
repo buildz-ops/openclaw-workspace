@@ -120,17 +120,19 @@
         <!-- Tab: CPU -->
         <section id="cpu" class="tab-content">
             <h1 class="page-title">Processor</h1>
-            <div class="card glass-card span-full">
-                <h2>Real-time Load History</h2>
-                <div class="chart-container-lg">
-                    <canvas id="cpu-main-chart"></canvas>
+            <div class="grid-layout"> <!-- Use Grid Layout Wrapper -->
+                <div class="card glass-card span-3"> <!-- Span 3 columns -->
+                    <h2>Real-time Load History</h2>
+                    <div class="chart-container-lg">
+                        <canvas id="cpu-main-chart"></canvas>
+                    </div>
                 </div>
-            </div>
-            <div class="grid-layout-3">
+                
+                <!-- Bottom Row -->
                 <div class="card glass-card">
-                    <h3>Temperature</h3>
-                    <div class="big-number" id="cpu-temp">--°C</div>
-                    <div class="label" style="margin-top:5px; font-size: 0.8rem;">Core Package (Root Req)</div>
+                    <h3>Status</h3>
+                    <div class="big-number" id="cpu-temp" style="font-size: 1.8rem;">--</div>
+                    <div class="label" id="cpu-temp-label" style="margin-top:5px; font-size: 0.8rem;">Thermal Pressure</div>
                 </div>
                 <div class="card glass-card">
                     <h3>Active Cores</h3>
@@ -186,22 +188,51 @@
         <section id="network" class="tab-content">
             <h1 class="page-title">Network Interfaces</h1>
             
-            <!-- Latency Card -->
-            <div class="card glass-card span-full" style="margin-bottom: 20px;">
-                <div class="grid-layout-3">
-                     <div>
-                        <h3>Internet Ping (Google)</h3>
-                        <div class="big-number" id="net-ping">-- ms</div>
-                     </div>
-                     <div class="span-2">
-                        <h3>Active Connection</h3>
-                        <div class="stat-row"><span class="label">Primary Interface</span><span class="value" id="net-primary-iface">--</span></div>
-                        <div class="stat-row"><span class="label">Primary IP</span><span class="value" id="net-primary-ip">--</span></div>
-                     </div>
+            <div class="grid-layout">
+                <!-- Big Block: Internet Performance -->
+                <div class="card glass-card span-2">
+                    <h2>Internet Connectivity</h2>
+                    <div style="display: flex; gap: 20px; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <div class="chart-container-sm" style="height: 200px;">
+                                <canvas id="net-ping-chart"></canvas>
+                            </div>
+                        </div>
+                        <div style="width: 150px;">
+                             <div style="margin-bottom: 20px;">
+                                <div class="label">Latency (Ping)</div>
+                                <div class="big-number" id="net-ping" style="font-size: 2rem;">-- ms</div>
+                             </div>
+                             <div>
+                                <div class="label">Primary IP</div>
+                                <div class="value" id="net-primary-ip" style="font-size: 1.1rem;">--</div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Small Block: Interface Details -->
+                <div class="card glass-card">
+                    <h2>Primary Interface</h2>
+                    <div class="big-number" id="net-primary-iface" style="font-size: 1.5rem; margin-bottom: 20px;">--</div>
+                    
+                    <div class="stat-row"><span class="label">Type</span><span class="value" id="net-primary-type">--</span></div>
+                    <div class="stat-row"><span class="label">MAC</span><span class="value" id="net-primary-mac" style="font-size: 0.8rem;">--</span></div>
+                    <div class="stat-row"><span class="label">State</span><span class="value" id="net-primary-state">--</span></div>
+                    
+                    <div style="margin-top: auto; padding-top: 20px;">
+                        <div class="stat-row"><span class="label">Current Speed</span></div>
+                        <div style="display: flex; justify-content: space-between;">
+                             <span id="net-primary-rx">↓ 0 KB/s</span>
+                             <span id="net-primary-tx">↑ 0 KB/s</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div id="network-container" class="grid-layout">
+            <!-- Other Interfaces -->
+            <h2 style="margin-top: 30px; opacity: 0.7; font-size: 1.2rem;">Other Interfaces</h2>
+            <div id="network-container" class="grid-layout-3">
                 <!-- Dynamically filled -->
             </div>
         </section>

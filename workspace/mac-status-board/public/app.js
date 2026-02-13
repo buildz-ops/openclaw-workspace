@@ -13,27 +13,34 @@ const els = {
     memUsed: document.getElementById('mem-used'),
     memFree: document.getElementById('mem-free'),
     cpuTemp: document.getElementById('cpu-temp'),
+    cpuTempLabel: document.getElementById('cpu-temp-label'),
     cpuCores: document.getElementById('cpu-cores'),
     cpuSpeed: document.getElementById('cpu-speed'),
     diskContainer: document.getElementById('disk-container'),
     networkContainer: document.getElementById('network-container'),
     memProgressBar: document.getElementById('mem-progress'),
-    // New
+    // Overview
     storageMainPercent: document.getElementById('storage-main-percent'),
     storageMainBar: document.getElementById('storage-main-bar'),
     netDownMini: document.getElementById('net-down-mini'),
     netUpMini: document.getElementById('net-up-mini'),
-    netPing: document.getElementById('net-ping'),
     netPrimaryIpMini: document.getElementById('net-primary-ip-mini'),
+    // Network Main
+    netPing: document.getElementById('net-ping'),
     netPrimaryIp: document.getElementById('net-primary-ip'),
-    netPrimaryIface: document.getElementById('net-primary-iface')
+    netPrimaryIface: document.getElementById('net-primary-iface'),
+    netPrimaryType: document.getElementById('net-primary-type'),
+    netPrimaryMac: document.getElementById('net-primary-mac'),
+    netPrimaryState: document.getElementById('net-primary-state'),
+    netPrimaryRx: document.getElementById('net-primary-rx'),
+    netPrimaryTx: document.getElementById('net-primary-tx')
 };
 
 // Charts Configuration
 Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
 Chart.defaults.font.family = 'Inter';
 
-let cpuMiniChart, memMiniChart, cpuMainChart, memHistoryChart;
+let cpuMiniChart, memMiniChart, cpuMainChart, memHistoryChart, netPingChart;
 
 function initCharts() {
     // 1. CPU Mini (Overview)
@@ -56,10 +63,7 @@ function initCharts() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: {
-                x: { display: false },
-                y: { min: 0, max: 100, display: false }
-            },
+            scales: { x: { display: false }, y: { min: 0, max: 100, display: false } },
             animation: false
         }
     });
@@ -104,10 +108,7 @@ function initCharts() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: {
-                x: { display: false },
-                y: { min: 0, max: 100, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
-            },
+            scales: { x: { display: false }, y: { min: 0, max: 100, grid: { color: 'rgba(255, 255, 255, 0.05)' } } },
             animation: false
         }
     });
@@ -132,13 +133,37 @@ function initCharts() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: {
-                x: { display: false },
-                y: { min: 0, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
-            },
+            scales: { x: { display: false }, y: { min: 0, grid: { color: 'rgba(255, 255, 255, 0.05)' } } },
             animation: false
         }
     });
+
+    // 5. Network Ping (Detailed)
+    if (document.getElementById('net-ping-chart')) {
+        netPingChart = new Chart(document.getElementById('net-ping-chart'), {
+            type: 'line',
+            data: {
+                labels: Array(30).fill(''),
+                datasets: [{
+                    label: 'Ping (ms)',
+                    data: Array(30).fill(0),
+                    borderColor: '#ff9500',
+                    backgroundColor: 'rgba(255, 149, 0, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { x: { display: false }, y: { min: 0, grid: { color: 'rgba(255, 255, 255, 0.05)' } } },
+                animation: false
+            }
+        });
+    }
 }
 
 // Data Handling
@@ -170,15 +195,26 @@ function updateUI(data) {
     }
 
     // Overview: Network Summary
-    // Use PrimaryNet from backend
     const pNet = data.primaryNet || {};
     els.netDownMini.innerText = `↓ ${pNet.rx_sec || 0} KB/s`;
     els.netUpMini.innerText = `↑ ${pNet.tx_sec || 0} KB/s`;
     els.netPrimaryIpMini.innerText = pNet.ip4 || 'No Connection';
-    els.netPing.innerText = `${data.ping || 0} ms`;
-
+    
     // 2. CPU
-    els.cpuTemp.innerText = data.cpu.temp !== "N/A" ? `${data.cpu.temp}°C` : 'N/A';
+    // If temp is available, show it. If not, show Thermal Pressure.
+    if (data.cpu.temp && data.cpu.temp !== "N/A") {
+        els.cpuTemp.innerText = `${data.cpu.temp}°C`;
+        els.cpuTempLabel.innerText = "Core Package";
+    } else {
+        // Fallback to thermal pressure
+        els.cpuTemp.innerText = data.cpu.thermal || "Unknown";
+        els.cpuTempLabel.innerText = "Thermal Pressure (Root Req for Temp)";
+        // Color code thermal pressure
+        if (data.cpu.thermal === 'Normal') els.cpuTemp.style.color = '#34c759';
+        else if (data.cpu.thermal === 'Fair') els.cpuTemp.style.color = '#ff9500';
+        else if (data.cpu.thermal === 'Serious') els.cpuTemp.style.color = '#ff3b30';
+    }
+
     els.cpuCores.innerText = data.cpu.cores.length;
     els.cpuSpeed.innerText = data.cpu.info.split('@')[1] || 'Unknown';
 
@@ -192,6 +228,7 @@ function updateUI(data) {
     updateChart(cpuMiniChart, data.cpu.load);
     updateChart(cpuMainChart, data.cpu.load);
     updateChart(memHistoryChart, data.mem.used);
+    if(netPingChart) updateChart(netPingChart, data.ping || 0);
     
     memMiniChart.data.datasets[0].data = [data.mem.used, data.mem.free];
     memMiniChart.update();
@@ -213,32 +250,31 @@ function updateUI(data) {
         els.diskContainer.appendChild(div);
     });
 
-    // 6. Network (Detailed Tab)
-    els.netPrimaryIface.innerText = pNet.iface || 'N/A';
+    // 6. Network (Main Tab)
+    els.netPing.innerText = `${data.ping || 0} ms`;
     els.netPrimaryIp.innerText = pNet.ip4 || 'N/A';
+    els.netPrimaryIface.innerText = pNet.iface || 'N/A';
+    els.netPrimaryType.innerText = pNet.type || 'Unknown';
+    els.netPrimaryMac.innerText = pNet.mac || 'N/A';
+    els.netPrimaryState.innerText = pNet.operstate || 'unknown';
     
+    els.netPrimaryRx.innerText = `↓ ${pNet.rx_sec || 0} KB/s`;
+    els.netPrimaryTx.innerText = `↑ ${pNet.tx_sec || 0} KB/s`;
+
+    // Other interfaces list
     els.networkContainer.innerHTML = '';
     data.network.forEach(net => {
-        // Show interfaces that are active OR have an IP (excluding localhost loopback unless it's the only one)
-        if (net.iface !== 'lo0' || data.network.length === 1) {
+        // Skip primary if already shown above? No, maybe show all but primary highlighted?
+        // Actually, let's just show others here.
+        if (net.iface !== pNet.iface && (net.ip4 || net.rx_sec > 0)) {
             const div = document.createElement('div');
             div.className = 'glass-card';
             div.innerHTML = `
                 <h3>${net.iface} <span style="font-size:0.7em; opacity:0.6">${net.type}</span></h3>
-                <div class="stat-row"><span class="label">IP Address</span><span class="value">${net.ip4 || 'N/A'}</span></div>
-                <div class="stat-row"><span class="label">MAC</span><span class="value" style="font-size:0.8em">${net.mac || 'N/A'}</span></div>
-                <div class="stat-row"><span class="label">State</span><span class="value" style="color: ${net.operstate === 'up' ? '#34c759' : '#ff3b30'}">${net.operstate}</span></div>
-                
-                <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div>
-                        <div class="label">Download</div>
-                        <div style="font-size: 1.2rem; font-weight: 600;">↓ ${net.rx_sec} KB/s</div>
-                    </div>
-                    <div>
-                        <div class="label">Upload</div>
-                        <div style="font-size: 1.2rem; font-weight: 600;">↑ ${net.tx_sec} KB/s</div>
-                    </div>
-                </div>
+                <div class="stat-row"><span class="label">IP</span><span class="value">${net.ip4 || 'N/A'}</span></div>
+                <div class="stat-row"><span class="label">State</span><span class="value">${net.operstate}</span></div>
+                <div class="stat-row"><span class="label">↓</span><span class="value">${net.rx_sec} KB/s</span></div>
+                <div class="stat-row"><span class="label">↑</span><span class="value">${net.tx_sec} KB/s</span></div>
             `;
             els.networkContainer.appendChild(div);
         }
