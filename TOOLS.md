@@ -2,20 +2,43 @@
 
 Skills define *how* tools work. This file is for *your* specifics — the stuff that's unique to your setup.
 
-## Google Workspace (Email, Calendar, Drive, Docs)
-**ALWAYS use the `google-workspace` MCP for Google services.**
-- **DO NOT USE `gog` CLI.** It is deprecated.
-- Email: `mcporter call google-workspace.gmail.send ...`
-- Calendar: `mcporter call google-workspace.calendar.list ...`
-- Drive/Docs/Sheets: Use corresponding `google-workspace.*` tools.
+## Search Strategy: Multi-API Routing (NEW!)
+**Based on:** "Your Agent Is Only as Good as Its Search" by @Legendaryy (Feb 2026)
 
-## Search Preference: Exa
-**ALWAYS use the `exa-search` skill for web searches instead of the native `web_search` tool.**
-- To search: `mcporter call exa.web_search_exa query="..."`
-- To research companies: `mcporter call exa.company_research_exa companyName="..."`
-- To find code: `mcporter call exa.get_code_context_exa query="..."`
-- For deep research: `mcporter call exa.deep_researcher_start instructions="..."`
-- Only fall back to native `web_search` if Exa fails.
+**ALWAYS use `scripts/search-router.sh` for web searches.**
+
+The router automatically picks the best API based on query type:
+- **Brave** → General facts, news, current events (fast, cheap, high-quality)
+- **Exa** → Semantic research, code examples, company info, people search
+
+**Usage:**
+```bash
+# Auto-detect query type (recommended)
+scripts/search-router.sh "latest AI news"
+
+# Explicit type
+scripts/search-router.sh "transformer papers" --type semantic
+scripts/search-router.sh "pandas examples" --type code
+scripts/search-router.sh "OpenAI" --type company
+```
+
+**Query types:**
+- `factual` - General lookups, news (→ Brave)
+- `semantic` - Research papers, "find X like Y" (→ Exa Advanced)
+- `code` - Code examples, API docs (→ Exa Code Context)
+- `company` - Company research (→ Exa Company)
+- `people` - Find professionals/experts (→ Exa People)
+- `extraction` - Pull content from URL (→ Exa Crawling)
+- `auto` - Let router decide (default)
+
+**Why this matters:**
+- **Search quality > Model quality** (Brave's research: weaker model + good search > GPT-4 + bad search)
+- **Multi-API routing saves 40-60% on costs**
+- **Each API has different strengths** - routing maximizes quality per dollar
+
+**Fallback:** If router fails, use `mcporter call exa.web_search_exa query="..."` directly.
+
+---
 
 ## Exec Workaround (spawn EBADF)
 If `exec` fails with `spawn EBADF`, use PTY mode with file redirect:

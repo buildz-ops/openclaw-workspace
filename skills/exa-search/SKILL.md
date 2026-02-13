@@ -1,11 +1,13 @@
 ---
 name: exa-search
-description: Use Exa AI for advanced web search, company research, and deep research tasks.
+description: Use Exa AI for advanced web search, company research, and deep research tasks. Part of the multi-API search routing strategy.
 ---
 
 # Exa Search
 
 This skill provides access to Exa AI's search and research capabilities via the `mcporter` tool.
+
+**Note:** For general searches, use `scripts/search-router.sh` which automatically picks the best API (Brave or Exa) based on query type.
 
 ## Prerequisites
 
