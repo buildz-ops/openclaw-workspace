@@ -4,7 +4,11 @@
       "baseUrl": "https://mcp.exa.ai/mcp?tools=web_search_exa,web_search_advanced_exa,get_code_context_exa,crawling_exa,company_research_exa,people_search_exa,deep_researcher_start,deep_researcher_check"
     },
     "brave-search": {
-      "command": "npx -y @brave/brave-search-mcp-server"
+      "command": "npx",
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": {
+        "BRAVE_API_KEY": "BSA6MmEGbd8WYGyDRJMQS-dMiU_P9KB"
+      }
     }
   },
   "imports": []
