@@ -1,0 +1,45 @@
+name: Daily Workspace Backup
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 02:00 CET daily
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create backup archive
+        run: |
+          BACKUP_FILE="workspace-backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+          tar --exclude='.git' --exclude='node_modules' --exclude='.venv' \
+            -czf "$BACKUP_FILE" .
+          echo "BACKUP_FILE=$BACKUP_FILE" >> $GITHUB_ENV
+          echo "Backup size: $(du -h $BACKUP_FILE | cut -f1)"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.BACKUP_FILE }}
+          tag_name: backup-$(date +%Y%m%d-%H%M%S)
+          body: |
+            Automated workspace backup
+            Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup old releases
+        run: |
+          # Keep only last 7 backups
+          gh release list --limit 100 --json name --jq '.[7:] | .[].name' \
+            | xargs -I {} gh release delete {} --yes || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
