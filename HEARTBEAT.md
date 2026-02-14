@@ -34,7 +34,7 @@ If nothing urgent, proceed to work mode.
 ## Reminders
 <!-- One-shot reminders. Delete after firing. -->
 <!-- Format: - YYYY-MM-DD HH:MM | Reminder text -->
-- 2026-02-14 09:00 | Clawtex team kickoff meeting scheduled today - blocker for Week 1 training start
+- 2026-02-14 16:00 | Clawtex team kickoff meeting scheduled today - blocker for Week 1 training start
 
 ## Rules
 1. If Active Tasks is empty AND Reminders have nothing due → HEARTBEAT_OK

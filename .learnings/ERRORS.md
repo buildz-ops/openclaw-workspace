@@ -44,3 +44,20 @@
 - **Root cause:** Codex CLI not installed on this machine
 - **Fix/workaround:** Ask Ayoub to install Codex CLI or use an available coding agent (claude/opencode/pi) instead
 - **Prevention:** Check for `codex` binary before spawning coding-agent tasks
+
+## 2026-02-14 — Cron delivery announce: only meta-summary posted, not actual report
+- **What happened:** daily-health-report cron ran and generated full detailed report internally, but only my short meta-summary ("Health report posted to #❤️health...") appeared in the channel, not the actual detailed report
+- **Root cause:** Two issues:
+  1. The cron agent's instructions said "Deliver to Discord channel..." which was confusing/redundant since delivery.mode="announce" handles posting automatically
+  2. The agent wasn't clear that its OUTPUT would be posted directly, so it may have been generating reports internally but not as the final response
+  3. I added my own meta-summary when seeing completion notifications, which was the ONLY thing that got posted
+- **Fix:** 
+  1. Updated **all three** cron jobs with delivery.mode="announce" (daily-health-report, morning-briefing, weekly-clawtex-summary)
+  2. Clarified instructions: "Your response will be posted directly to Discord - format it as the complete [report/briefing/summary], not a delivery confirmation"
+  3. Removed redundant "Deliver to Discord channel..." instructions
+  4. When I see cron completion announcements for jobs with delivery.mode="announce", respond with NO_REPLY (the cron output should already be posted)
+- **Prevention:** 
+  - Cron agents with delivery.mode="announce": their RESPONSE is what gets posted to the target channel
+  - Instruction should be clear: "Your response will be posted directly" so agent knows to format the full report as output
+  - Main session: when seeing completion announcements → NO_REPLY (output already posted)
+  - **Rule:** Cron delivery.mode="announce" posts the agent's RESPONSE text directly to target
