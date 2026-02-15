@@ -20,7 +20,12 @@
 **Decision:** Dedicated Mac Mini as always-on OpenClaw host  
 **Status:** Active (heartbeat every 30m, 7 cron jobs)  
 **Follow-up date:** 2026-02-15  
-**Review:** Stability? Any issues? Ollama performance? Battery/thermal concerns?
+**Review:** 
+- **Stability:** Excellent (6+ days uptime). 
+- **Issues:** Heartbeat fell back to Gemini due to 8k context limit on local Llama (fixed 2026-02-15 by increasing to 32k). 
+- **Performance:** Local inference working well now. 
+- **Thermals:** Cool, no throttling. 
+- **Verdict:** Keep as primary host.
 
 ### 2026-02-12: Proactive System Activated
 **Decision:** Populated task queue and tracking files, enabled autonomous execution  
