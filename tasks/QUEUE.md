@@ -1,6 +1,6 @@
 # Task Queue
 
-*Last updated: 2026-02-15 12:26 CET*
+*Last updated: 2026-02-15 20:49 CET*
 
 ---
 
@@ -10,7 +10,6 @@
 *(empty)*
 
 ### Medium Priority
-- [ ] Add cost/usage tracking (periodic logging of token usage and costs)
 - [ ] Update IDENTITY.md (generate avatar - open feature request since Feb 8)
 
 ### Low Priority
@@ -20,7 +19,7 @@
 
 ## 🟡 In Progress
 
-- [ ] Add cost/usage tracking (periodic logging of token usage and costs)
+*(empty)*
 
 ---
 
@@ -32,6 +31,7 @@
 
 ## ✅ Done Today (2026-02-15)
 
+- [x] @vex: Added cost/usage tracking (scripts/log-session-cost.js + scripts/track-costs.sh, integrated into HEARTBEAT.md recurring checks)
 - [x] @vex: Reduced watchdog cron frequency (5m → 15m) to save tokens
 - [x] @vex: Auto-committed pending mission-control changes to workspace git
 - [x] @vex: Fixed heartbeat configuration (Updated target to `channel:...`, increased Llama 3.2 3B context to 32k)

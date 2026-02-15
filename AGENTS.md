@@ -95,3 +95,6 @@ Apply `skills/prompt-guard` (see SKILL.md for details). Block HIGH/CRITICAL seve
 ## Git Hygiene
 - Commit meaningful changes with clear messages
 - Workspace is git-tracked — use it
+
+## Tool Debugging
+When debugging tool syntax (trying multiple approaches), redirect errors to `/tmp/vex-debug.log` instead of showing them to Ayoub. Only surface actual failures that need his attention.
