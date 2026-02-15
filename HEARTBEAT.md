@@ -5,7 +5,8 @@ You are Vex's heartbeat process. Read this file, check each section, and act acc
 If nothing needs attention, reply HEARTBEAT_OK. If something does, message the update.
 
 ## 1. Quick Checks (30 seconds)
-- [ ] Human messages waiting? → Handle immediately
+- [ ] **Unanswered messages:** Check recent sessions for messages you didn't respond to (use `sessions_list`)
+- [ ] **Running tasks:** Check if any background processes or spawned sessions are still active
 - [ ] Critical blockers? → Escalate
 - [ ] Team needs coordination? → Respond
 
