@@ -1,33 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 export default function ChatView() {
-  const [messages, setMessages] = useState<any[]>([]);
+  const messages = useQuery(api.messages.list) || [];
+  const sendMessage = useMutation(api.messages.send);
   const [input, setInput] = useState("");
-
-  useEffect(() => {
-    fetch("/api/chat-history")
-      .then((res) => res.json())
-      .then((data) => setMessages(data.messages || []));
-  }, []);
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const response = await fetch("/api/chat-send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      setMessages([...messages, { role: "user", content: input, timestamp: data.timestamp }]);
-      setInput("");
-    }
+    await sendMessage({ content: input, role: "user" });
+    setInput("");
   };
 
   return (
@@ -41,7 +29,10 @@ export default function ChatView() {
           {messages.length === 0 ? (
             <div className="text-center text-neutral-400 mt-20">No messages yet</div>
           ) : (
-            messages.map((msg, idx) => (
+            // Reverse map to show newest at bottom if using flex-col-reverse, or just map normally.
+            // Backend returns order("desc") so newest first. We probably want oldest first for chat view.
+            // Let's reverse locally or change backend to asc.
+            [...messages].reverse().map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[70%] p-4 rounded-2xl ${

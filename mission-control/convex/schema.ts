@@ -45,4 +45,10 @@ export default defineSchema({
     publishedAt: v.optional(v.number()),
     createdAt: v.number(),
   }),
+
+  messages: defineTable({
+    role: v.string(), // user, assistant
+    content: v.string(),
+    timestamp: v.number(),
+  }),
 });
