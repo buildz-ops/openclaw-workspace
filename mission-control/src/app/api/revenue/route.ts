@@ -1,29 +1,47 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import os from "os";
+import { parseNumber, readFileIfExists } from "@/lib/workspace/fs-utils";
+import { buildMeta } from "@/lib/workspace/meta";
+import { workspacePath } from "@/lib/workspace/paths";
+import { MissionApiResponse, RevenueSummary } from "@/lib/types/mission";
 
-const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(os.homedir(), ".openclaw/workspace");
+function extractMetric(markdown: string, label: string): number | null {
+  const regex = new RegExp(`${label}\\s*[:=]\\s*([^\\n]+)`, "i");
+  const match = markdown.match(regex);
+  return parseNumber(match?.[1]);
+}
 
 export async function GET() {
   try {
-    // Read revenue/financial data from workspace
-    const financePath = path.join(WORKSPACE, "notes/areas/revenue.md");
-    
-    const revenueData = {
-      current: 0,
-      target: 10000,
-      growth: 0,
-      mrr: 0,
+    const revenuePath = workspacePath("notes", "areas", "revenue.md");
+    const markdown = readFileIfExists(revenuePath);
+
+    const data: RevenueSummary = {
+      current: markdown ? extractMetric(markdown, "current") ?? 0 : 0,
+      target: markdown ? extractMetric(markdown, "target") ?? 0 : 0,
+      growth: markdown ? extractMetric(markdown, "growth") ?? 0 : 0,
+      mrr: markdown ? extractMetric(markdown, "mrr") ?? 0 : 0,
     };
-    
-    if (fs.existsSync(financePath)) {
-      const content = fs.readFileSync(financePath, "utf-8");
-      // Parse revenue data
-    }
-    
-    return NextResponse.json(revenueData);
+
+    const response: MissionApiResponse<RevenueSummary> = {
+      meta: buildMeta(
+        markdown ? "partial" : "unavailable",
+        markdown ? [revenuePath] : [],
+        markdown
+          ? "Revenue file loaded; parsed known numeric fields only."
+          : "Revenue source file is missing (notes/areas/revenue.md).",
+      ),
+      data,
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to read revenue" }, { status: 500 });
+    return NextResponse.json(
+      {
+        meta: buildMeta("unavailable", [], "Failed to read revenue data."),
+        data: { current: 0, target: 0, growth: 0, mrr: 0 },
+        error: String(error),
+      },
+      { status: 500 },
+    );
   }
 }

@@ -2,59 +2,121 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, Bot, MessageSquare, FileText, Send, Brain, Code } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Activity } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const navItems = [
-  { href: "/", label: "Overview", icon: Activity },
-  { href: "/ops", label: "Ops", icon: Activity },
-  { href: "/agents", label: "Agents", icon: Bot },
-  { href: "/chat", label: "Chat", icon: MessageSquare },
-  { href: "/content", label: "Content", icon: FileText },
-  { href: "/comms", label: "Comms", icon: Send },
-  { href: "/knowledge", label: "Knowledge", icon: Brain },
-  { href: "/code", label: "Code", icon: Code },
+  { label: "HOME", href: "/" },
+  { label: "OPS", href: "/ops" },
+  { label: "AGENTS", href: "/agents" },
+  { label: "CHAT", href: "/chat" },
+  { label: "CONTENT", href: "/content" },
+  { label: "COMMS", href: "/comms" },
+  { label: "KNOWLEDGE", href: "/knowledge" },
+  { label: "CODE", href: "/code" },
 ];
 
 export default function Navigation() {
   const pathname = usePathname();
+  const [time, setTime] = useState("");
+  const [status, setStatus] = useState<"online" | "offline" | "checking">("checking");
+
+  useEffect(() => {
+    // Update time
+    const updateTime = () => {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+      setTime(timeStr);
+    };
+    
+    updateTime();
+    const timeInterval = setInterval(updateTime, 1000);
+
+    // Check system status
+    const checkStatus = async () => {
+      try {
+        const response = await fetch("/api/system-state");
+        if (response.ok) {
+          setStatus("online");
+        } else {
+          setStatus("offline");
+        }
+      } catch {
+        setStatus("offline");
+      }
+    };
+
+    checkStatus();
+    const statusInterval = setInterval(checkStatus, 30000);
+
+    return () => {
+      clearInterval(timeInterval);
+      clearInterval(statusInterval);
+    };
+  }, []);
 
   return (
-    <nav className="glass border-b sticky top-0 z-50">
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-8">
-            <Link href="/" className="text-xl font-bold text-gradient">
-              Mission Control
-            </Link>
-            <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200",
-                      isActive
-                        ? "bg-white/10 text-white"
-                        : "text-neutral-400 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="text-sm font-medium">{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
+    <nav className="nav-container sticky top-0 z-50">
+      <div className="flex items-center justify-between px-8 py-3 max-w-[1800px] mx-auto">
+        {/* Brand */}
+        <div className="flex items-center gap-3 mr-12">
+          <Activity className="w-4 h-4 text-cyan" strokeWidth={2} />
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-title">
+            MISSION-CONTROL
+          </span>
+        </div>
+
+        {/* Divider */}
+        <div className="divider-vertical h-8 mx-4" />
+
+        {/* Nav Items */}
+        <div className="flex-1 flex items-center gap-0.5">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`nav-item ${isActive ? "nav-item-active" : ""}`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Divider */}
+        <div className="divider-vertical h-8 mx-4" />
+
+        {/* Status */}
+        <div className="flex items-center gap-3 ml-8">
+          <div className="flex items-center gap-2">
+            <span 
+              className={`status-dot ${
+                status === "online" ? "status-ok" : 
+                status === "offline" ? "status-alert" : 
+                "status-data"
+              } ${status === "online" ? "animate-pulse" : ""}`}
+            />
+            <span 
+              className={`text-[0.65rem] uppercase tracking-[0.15em] font-bold ${
+                status === "online" ? "text-green" :
+                status === "offline" ? "text-magenta" :
+                "text-cyan"
+              }`}
+            >
+              {status.toUpperCase()}
+            </span>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm text-neutral-400">Online</span>
-            </div>
-          </div>
+          <div className="divider-vertical h-6" />
+          <span className="text-[0.65rem] text-value font-mono tracking-wider">
+            {time || "00:00:00"}
+          </span>
         </div>
       </div>
     </nav>

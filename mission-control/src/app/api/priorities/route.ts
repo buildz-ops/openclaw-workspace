@@ -1,26 +1,36 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import os from "os";
-
-const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(os.homedir(), ".openclaw/workspace");
+import { readFileIfExists } from "@/lib/workspace/fs-utils";
+import { buildMeta } from "@/lib/workspace/meta";
+import { workspacePath } from "@/lib/workspace/paths";
+import { parseQueueTasks } from "@/lib/workspace/queue";
+import { MissionApiResponse, TaskCard } from "@/lib/types/mission";
 
 export async function GET() {
   try {
-    // Read priorities from workspace
-    const prioritiesPath = path.join(WORKSPACE, "notes/areas/priorities.md");
-    
-    const priorities = [
-      { id: "1", title: "Build Mission Control", status: "in-progress" },
-    ];
-    
-    if (fs.existsSync(prioritiesPath)) {
-      const content = fs.readFileSync(prioritiesPath, "utf-8");
-      // Parse priorities
-    }
-    
-    return NextResponse.json({ priorities });
+    const queuePath = workspacePath("tasks", "QUEUE.md");
+    const queueMarkdown = readFileIfExists(queuePath);
+
+    const allTasks = queueMarkdown ? parseQueueTasks(queueMarkdown) : [];
+    const priorities: TaskCard[] = allTasks.filter((task) => task.status !== "done");
+
+    const response: MissionApiResponse<{ priorities: TaskCard[] }> = {
+      meta: buildMeta(
+        priorities.length > 0 ? "ok" : queueMarkdown ? "partial" : "unavailable",
+        queueMarkdown ? [queuePath] : [],
+        priorities.length === 0 ? "No active priorities found in task queue." : undefined,
+      ),
+      data: { priorities },
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to read priorities" }, { status: 500 });
+    return NextResponse.json(
+      {
+        meta: buildMeta("unavailable", [], "Failed to read priorities."),
+        data: { priorities: [] },
+        error: String(error),
+      },
+      { status: 500 },
+    );
   }
 }

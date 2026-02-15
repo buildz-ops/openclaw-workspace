@@ -1,37 +1,107 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
+import { LucideIcon } from "lucide-react";
+import { ReactNode } from "react";
 
 interface StatusCardProps {
   title: string;
-  value: string;
-  icon: LucideIcon;
-  trend?: string;
-  trendUp?: boolean;
+  value: string | number;
+  icon?: LucideIcon;
+  status?: "ok" | "alert" | "data" | "attention" | "neutral";
+  subtitle?: string;
+  className?: string;
 }
 
-export default function StatusCard({ title, value, icon: Icon, trend, trendUp }: StatusCardProps) {
+/**
+ * KPI Card with GLOWING numbers
+ * Dark background with color-coded luminance effect
+ */
+export default function StatusCard({
+  title,
+  value,
+  icon: Icon,
+  status = "neutral",
+  subtitle,
+  className = "",
+}: StatusCardProps) {
+  const glowClass = {
+    ok: "kpi-number-green",
+    alert: "kpi-number-red",
+    data: "kpi-number-cyan",
+    attention: "kpi-number-yellow",
+    neutral: "",
+  }[status];
+
+  const iconColor = {
+    ok: "text-green",
+    alert: "text-red",
+    data: "text-cyan",
+    attention: "text-yellow",
+    neutral: "text-label",
+  }[status];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02 }}
-      className="glass rounded-3xl p-6 glass-hover cursor-pointer"
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="p-3 rounded-2xl bg-white/5">
-          <Icon className="w-5 h-5 text-blue-400" />
-        </div>
-        {trend && (
-          <div className={`flex items-center space-x-1 text-sm ${trendUp ? "text-green-400" : "text-red-400"}`}>
-            {trendUp ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-            <span>{trend}</span>
-          </div>
-        )}
+    <div className={`glass-card flex flex-col ${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <span className="kpi-label">{title}</span>
+        {Icon && <Icon className={`w-4 h-4 ${iconColor}`} style={{ opacity: 0.6 }} />}
       </div>
-      <h3 className="text-sm text-neutral-400 mb-1">{title}</h3>
-      <p className="text-2xl font-bold">{value}</p>
-    </motion.div>
+      
+      <div className={`kpi-number ${glowClass} mb-2`}>
+        {value}
+      </div>
+
+      {subtitle && (
+        <div className="text-meta text-xs mt-1">
+          {subtitle}
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface MetricCardProps {
+  title: string;
+  icon?: string;
+  children: ReactNode;
+  className?: string;
+}
+
+/**
+ * Compact card for nested metric groups (RECONCILIATION section)
+ */
+export function MetricCard({ title, icon, children, className = "" }: MetricCardProps) {
+  return (
+    <div className={`glass-card-compact ${className}`}>
+      <div className="flex items-center gap-2 mb-4">
+        {icon && <span className="text-base" style={{ opacity: 0.7 }}>{icon}</span>}
+        <span className="text-header">{title}</span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+interface MetricItemProps {
+  label: string;
+  value: string | number;
+  status?: "ok" | "alert" | "data" | "attention" | "neutral";
+}
+
+/**
+ * Single metric row (label + value with muted styling)
+ */
+export function MetricItem({ label, value, status = "neutral" }: MetricItemProps) {
+  const valueColor = {
+    ok: "text-green",
+    alert: "text-red",
+    data: "text-cyan",
+    attention: "text-yellow",
+    neutral: "",
+  }[status];
+
+  return (
+    <div className="metric-row">
+      <span className="metric-row-label">{label}</span>
+      <span className={`metric-row-value ${valueColor}`}>{value}</span>
+    </div>
   );
 }

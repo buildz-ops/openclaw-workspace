@@ -1,32 +1,68 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import os from "os";
+import { fileMtime } from "@/lib/workspace/fs-utils";
+import { buildMeta } from "@/lib/workspace/meta";
+import { readOpenClawConfig } from "@/lib/workspace/openclaw-config";
+import { workspacePath } from "@/lib/workspace/paths";
+import { AgentSummary, MissionApiResponse } from "@/lib/types/mission";
 
-const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(os.homedir(), ".openclaw/workspace");
+function ageToStatus(iso: string | null): AgentSummary["status"] {
+  if (!iso) return "offline";
+  const minutes = (Date.now() - new Date(iso).getTime()) / 60000;
+  if (minutes <= 30) return "active";
+  if (minutes <= 180) return "idle";
+  return "stale";
+}
 
 export async function GET() {
   try {
-    // Read agent information from workspace
-    const agentsPath = path.join(WORKSPACE, "AGENTS.md");
-    
-    const agents = [
+    const sessionPath = workspacePath("SESSION-STATE.md");
+    const sessionLastSeen = fileMtime(sessionPath);
+
+    const { path: openclawConfigPath, config } = readOpenClawConfig();
+    const primaryModel = config?.agents?.defaults?.model?.primary ?? "unknown";
+    const heartbeatModel = config?.agents?.defaults?.heartbeat?.model ?? "unknown";
+
+    const agents: AgentSummary[] = [
       {
         id: "main",
-        name: "Main Agent",
-        status: "active",
-        model: "claude-sonnet-4-5",
-        lastSeen: new Date().toISOString(),
+        name: "VEX Main Agent",
+        role: "orchestrator",
+        status: ageToStatus(sessionLastSeen),
+        model: primaryModel,
+        lastSeen: sessionLastSeen,
+      },
+      {
+        id: "heartbeat",
+        name: "Heartbeat Agent",
+        role: "watchdog",
+        status: heartbeatModel === "unknown" ? "offline" : "active",
+        model: heartbeatModel,
+        lastSeen: sessionLastSeen,
       },
     ];
-    
-    if (fs.existsSync(agentsPath)) {
-      const content = fs.readFileSync(agentsPath, "utf-8");
-      // Could parse for additional agent info
-    }
-    
-    return NextResponse.json({ agents });
+
+    const sources: string[] = [];
+    if (sessionLastSeen) sources.push(sessionPath);
+    if (config) sources.push(openclawConfigPath);
+
+    const response: MissionApiResponse<{ agents: AgentSummary[] }> = {
+      meta: buildMeta(
+        sources.length === 2 ? "ok" : sources.length > 0 ? "partial" : "unavailable",
+        sources,
+        sources.length < 2 ? "Agent data is partially available due to missing config/session files." : undefined,
+      ),
+      data: { agents },
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to read agents" }, { status: 500 });
+    return NextResponse.json(
+      {
+        meta: buildMeta("unavailable", [], "Failed to read agent status."),
+        data: { agents: [] },
+        error: String(error),
+      },
+      { status: 500 },
+    );
   }
 }

@@ -19,10 +19,13 @@ module.exports = {
       cwd: "/Users/vex/.openclaw/workspace/mission-control",
       env: {
         NODE_ENV: "development",
+        PORT: "3000",
       },
       output: "/Users/vex/.openclaw/logs/mission-control-next.log",
       error: "/Users/vex/.openclaw/logs/mission-control-next-error.log",
       merge_logs: true,
+      kill_timeout: 5000,
+      wait_ready: true,
     },
   ],
 };

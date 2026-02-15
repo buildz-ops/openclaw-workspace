@@ -1,71 +1,74 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Users, Building, Network } from "lucide-react";
+import MissionPageHeader from "@/components/mission/mission-page-header";
+import MissionPanel from "@/components/mission/mission-panel";
+import MissionPill from "@/components/mission/mission-pill";
+import { fetchMission } from "@/lib/fetch-mission";
+import { CommsItem } from "@/lib/types/mission";
 
 export default function CommsView() {
-  const [clients, setClients] = useState<any[]>([]);
-  const [ecosystem, setEcosystem] = useState<any[]>([]);
+  const [clients, setClients] = useState<CommsItem[]>([]);
+  const [ecosystem, setEcosystem] = useState<CommsItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/clients")
-      .then((res) => res.json())
-      .then((data) => setClients(data.clients || []));
-
-    fetch("/api/ecosystem")
-      .then((res) => res.json())
-      .then((data) => setEcosystem(data.ecosystem || []));
+    Promise.all([
+      fetchMission<{ clients: CommsItem[] }>("/api/clients"),
+      fetchMission<{ ecosystem: CommsItem[] }>("/api/ecosystem"),
+    ])
+      .then(([clientsRes, ecosystemRes]) => {
+        setClients(clientsRes.data.clients);
+        setEcosystem(ecosystemRes.data.ecosystem);
+      })
+      .catch(() => {
+        setClients([]);
+        setEcosystem([]);
+      });
   }, []);
 
   return (
-    <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass rounded-3xl p-6"
-      >
-        <div className="flex items-center space-x-3 mb-4">
-          <Users className="w-5 h-5 text-blue-400" />
-          <h2 className="text-xl font-semibold">Clients</h2>
-        </div>
-        <div className="space-y-3">
-          {clients.length === 0 ? (
-            <p className="text-neutral-400">No clients yet</p>
-          ) : (
-            clients.map((client) => (
-              <div key={client.id} className="p-3 rounded-2xl bg-white/5">
-                <div className="font-medium">{client.name}</div>
-                <div className="text-sm text-neutral-400">{client.status}</div>
-              </div>
-            ))
-          )}
-        </div>
-      </motion.div>
+    <div className="mc-stack mc-route-layout">
+      <MissionPageHeader title="Comms" subtitle="Client and ecosystem relationship map" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="glass rounded-3xl p-6"
-      >
-        <div className="flex items-center space-x-3 mb-4">
-          <Network className="w-5 h-5 text-purple-400" />
-          <h2 className="text-xl font-semibold">Ecosystem</h2>
-        </div>
-        <div className="space-y-3">
-          {ecosystem.length === 0 ? (
-            <p className="text-neutral-400">No ecosystem connections yet</p>
-          ) : (
-            ecosystem.map((item) => (
-              <div key={item.id} className="p-3 rounded-2xl bg-white/5">
-                <div className="font-medium">{item.name}</div>
-                <div className="text-sm text-neutral-400">{item.type}</div>
-              </div>
-            ))
-          )}
-        </div>
-      </motion.div>
+      <div className="mc-grid-2 mc-fill-grid">
+        <MissionPanel className="mc-route-panel" title="Clients" subtitle="notes/areas/clients.md">
+          <div className="mc-list mc-scroll-area">
+            {clients.map((client) => (
+              <article key={client.id} className="mc-list-item">
+                <div className="mc-row">
+                  <p className="mc-list-title">{client.name}</p>
+                  <MissionPill tone="info">{client.status}</MissionPill>
+                </div>
+                <p className="mc-list-sub">{client.type}</p>
+              </article>
+            ))}
+            {clients.length === 0 ? (
+              <article className="mc-list-item">
+                <p className="mc-list-sub">Source missing or empty.</p>
+              </article>
+            ) : null}
+          </div>
+        </MissionPanel>
+
+        <MissionPanel className="mc-route-panel" title="Ecosystem" subtitle="notes/areas/ecosystem.md">
+          <div className="mc-list mc-scroll-area">
+            {ecosystem.map((item) => (
+              <article key={item.id} className="mc-list-item">
+                <div className="mc-row">
+                  <p className="mc-list-title">{item.name}</p>
+                  <MissionPill tone="neutral">{item.type}</MissionPill>
+                </div>
+                <p className="mc-list-sub">{item.status}</p>
+              </article>
+            ))}
+            {ecosystem.length === 0 ? (
+              <article className="mc-list-item">
+                <p className="mc-list-sub">Source missing or empty.</p>
+              </article>
+            ) : null}
+          </div>
+        </MissionPanel>
+      </div>
     </div>
   );
 }

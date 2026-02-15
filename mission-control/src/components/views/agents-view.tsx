@@ -1,54 +1,150 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Bot, Activity } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Bot, BrainCircuit, Cable, Cpu } from "lucide-react";
+import MissionDataGrid, { MissionColumn } from "@/components/mission/mission-data-grid";
+import MissionPageHeader from "@/components/mission/mission-page-header";
+import MissionPanel from "@/components/mission/mission-panel";
+import MissionPill from "@/components/mission/mission-pill";
+import MissionStatCard from "@/components/mission/mission-stat-card";
+import MissionTabs from "@/components/mission/mission-tabs";
+import { fetchMission } from "@/lib/fetch-mission";
+import { AgentSummary, ModelInventory, ModelRecord } from "@/lib/types/mission";
+
+type AgentsTab = "agents" | "models";
 
 export default function AgentsView() {
-  const [agents, setAgents] = useState<any[]>([]);
+  const [tab, setTab] = useState<AgentsTab>("agents");
+  const [agents, setAgents] = useState<AgentSummary[]>([]);
+  const [models, setModels] = useState<ModelInventory | null>(null);
 
   useEffect(() => {
-    fetch("/api/agents")
-      .then((res) => res.json())
-      .then((data) => setAgents(data.agents || []));
+    const pull = async () => {
+      const [agentsRes, modelsRes] = await Promise.all([
+        fetchMission<{ agents: AgentSummary[] }>("/api/agents"),
+        fetchMission<ModelInventory>("/api/models"),
+      ]);
+      setAgents(agentsRes.data.agents);
+      setModels(modelsRes.data);
+    };
+
+    pull().catch(() => {
+      setAgents([]);
+      setModels(null);
+    });
   }, []);
 
+  const activeAgents = agents.filter((agent) => agent.status === "active").length;
+
+  const modelColumns: Array<MissionColumn<ModelRecord>> = useMemo(
+    () => [
+      { key: "id", label: "MODEL" },
+      { key: "provider", label: "PROVIDER" },
+      {
+        key: "reasoning",
+        label: "CAPABILITIES",
+        render: (row) => `${row.reasoning ? "reasoning" : "standard"} · ${row.input.join(",")}`,
+      },
+      {
+        key: "contextWindow",
+        label: "CONTEXT",
+        align: "right",
+        render: (row) => (row.contextWindow ? row.contextWindow.toLocaleString() : "-") as string,
+      },
+    ],
+    [],
+  );
+
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {agents.map((agent, index) => (
-          <motion.div
-            key={agent.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="glass rounded-3xl p-6 glass-hover"
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-2xl bg-blue-500/10">
-                <Bot className="w-6 h-6 text-blue-400" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Activity className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-green-400">{agent.status}</span>
-              </div>
+    <div className="mc-stack mc-route-layout-kpi">
+      <MissionPageHeader title="Agents" subtitle="Execution surface // model inventory // routing map" />
+
+      <MissionTabs
+        tabs={[
+          { id: "agents", label: "Agents", badge: agents.length },
+          { id: "models", label: "Models", badge: models?.summary.totalModels ?? 0 },
+        ]}
+        active={tab}
+        onChange={(id) => setTab(id as AgentsTab)}
+      />
+
+      <section className="mc-grid-4">
+        <MissionStatCard
+          label="Total Models"
+          value={models?.summary.totalModels ?? 0}
+          tone="info"
+          icon={<BrainCircuit size={14} />}
+        />
+        <MissionStatCard
+          label="Active Agents"
+          value={`${activeAgents}/${agents.length}`}
+          tone={activeAgents > 0 ? "ok" : "critical"}
+          icon={<Bot size={14} />}
+        />
+        <MissionStatCard
+          label="Monthly Subs"
+          value={models?.summary.estimatedMonthlySubs ?? "N/A"}
+          tone="warn"
+          icon={<Cable size={14} />}
+          detail="If available from source"
+        />
+        <MissionStatCard
+          label="API Spend"
+          value={models?.summary.estimatedApiSpend ?? "N/A"}
+          tone="critical"
+          icon={<Cpu size={14} />}
+          detail="Not exposed in config"
+        />
+      </section>
+
+      {tab === "agents" ? (
+        <MissionPanel className="mc-route-panel" title="Agent Runtime" subtitle="Derived from session and OpenClaw config">
+          <div className="mc-list mc-scroll-area">
+            {agents.map((agent) => (
+              <article key={agent.id} className="mc-list-item">
+                <div className="mc-row">
+                  <p className="mc-list-title">{agent.name}</p>
+                  <MissionPill tone={agent.status === "active" ? "ok" : agent.status === "idle" ? "warn" : "critical"}>
+                    {agent.status}
+                  </MissionPill>
+                </div>
+                <p className="mc-list-sub">
+                  {agent.role} · {agent.model}
+                </p>
+              </article>
+            ))}
+            {agents.length === 0 ? (
+              <article className="mc-list-item">
+                <p className="mc-list-sub">No agent source data available.</p>
+              </article>
+            ) : null}
+          </div>
+        </MissionPanel>
+      ) : null}
+
+      {tab === "models" ? (
+        <section className="mc-dual-stack">
+          <MissionPanel className="mc-route-panel" title="Task Routing" subtitle="Primary/fallback policy from OpenClaw config">
+            <div className="mc-list mc-scroll-area">
+              {(models?.routing || []).map((route) => (
+                <article className="mc-list-item" key={route.task}>
+                  <div className="mc-row">
+                    <p className="mc-list-title">{route.task}</p>
+                    <MissionPill tone="info">{route.primary}</MissionPill>
+                  </div>
+                  <p className="mc-list-sub">Fallback: {route.fallback || "none"}</p>
+                </article>
+              ))}
             </div>
-            <h3 className="text-xl font-semibold mb-2">{agent.name}</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Model</span>
-                <span className="font-mono">{agent.model}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Last Seen</span>
-                <span className="font-mono">
-                  {new Date(agent.lastSeen).toLocaleTimeString()}
-                </span>
-              </div>
+          </MissionPanel>
+
+          <MissionPanel className="mc-route-panel" title="Model Inventory" subtitle="Sanitized provider/model metadata">
+            <div className="mc-scroll-area">
+              <MissionDataGrid columns={modelColumns} rows={models?.models || []} emptyText="No model definitions found." />
             </div>
-          </motion.div>
-        ))}
-      </div>
+          </MissionPanel>
+        </section>
+      ) : null}
     </div>
   );
 }

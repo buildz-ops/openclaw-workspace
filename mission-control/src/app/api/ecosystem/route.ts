@@ -1,24 +1,44 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import os from "os";
+import { parseBulletItems } from "@/lib/workspace/markdown-parse";
+import { readFileIfExists } from "@/lib/workspace/fs-utils";
+import { buildMeta } from "@/lib/workspace/meta";
+import { workspacePath } from "@/lib/workspace/paths";
+import { CommsItem, MissionApiResponse } from "@/lib/types/mission";
 
-const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(os.homedir(), ".openclaw/workspace");
+function toEcosystem(line: string, index: number): CommsItem {
+  const [name, type = "network"] = line.split(/\s[-–:]\s/);
+  return {
+    id: `ecosystem-${index + 1}`,
+    name: name.trim(),
+    type: type.trim(),
+    status: "tracked",
+  };
+}
 
 export async function GET() {
   try {
-    // Read ecosystem/network information
-    const ecosystemPath = path.join(WORKSPACE, "notes/areas/ecosystem.md");
-    
-    const ecosystem: Array<{ id: string; name: string; type: string }> = [];
-    
-    if (fs.existsSync(ecosystemPath)) {
-      const content = fs.readFileSync(ecosystemPath, "utf-8");
-      // Parse ecosystem data
-    }
-    
-    return NextResponse.json({ ecosystem });
+    const ecosystemPath = workspacePath("notes", "areas", "ecosystem.md");
+    const markdown = readFileIfExists(ecosystemPath);
+    const ecosystem = markdown ? parseBulletItems(markdown).map(toEcosystem) : [];
+
+    const response: MissionApiResponse<{ ecosystem: CommsItem[] }> = {
+      meta: buildMeta(
+        ecosystem.length > 0 ? "ok" : markdown ? "partial" : "unavailable",
+        markdown ? [ecosystemPath] : [],
+        ecosystem.length === 0 ? "No ecosystem records found in notes/areas/ecosystem.md." : undefined,
+      ),
+      data: { ecosystem },
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to read ecosystem" }, { status: 500 });
+    return NextResponse.json(
+      {
+        meta: buildMeta("unavailable", [], "Failed to read ecosystem."),
+        data: { ecosystem: [] },
+        error: String(error),
+      },
+      { status: 500 },
+    );
   }
 }

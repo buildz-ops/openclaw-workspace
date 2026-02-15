@@ -20,7 +20,7 @@
 
 ## 🟡 In Progress
 
-*(empty)*
+- [ ] Add cost/usage tracking (periodic logging of token usage and costs)
 
 ---
 
