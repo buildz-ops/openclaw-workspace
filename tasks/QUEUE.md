@@ -1,24 +1,21 @@
 # Task Queue
 
-*Last updated: 2026-02-12 13:26 CET*
+*Last updated: 2026-02-15 11:55 CET*
 
 ---
 
 ## 🔴 Ready (can be picked up)
 
 ### High Priority
-- [ ] Remove mission-control/ from workspace (moved to ~/repos/mission-control) and add build artifacts to .gitignore
-- [ ] Consolidate memory files (last 9 days of daily logs need to be distilled into MEMORY.md)
+*(empty)*
 
 ### Medium Priority
-- [ ] Archive old audit file (security-audit-2026-02-08.md → archive it or delete)
-- [ ] Document model configuration mismatch (USER.md says "Sonnet 4.5 primary" but config uses Gemini Flash)
-- [ ] Review workspace git status weekly (check for uncommitted changes, large files)
-
-### Low Priority
 - [ ] Consider reducing watchdog cron frequency (every 5min → every 15min to save tokens)
 - [ ] Add cost/usage tracking (periodic logging of token usage and costs)
 - [ ] Update IDENTITY.md (generate avatar - open feature request since Feb 8)
+
+### Low Priority
+*(empty)*
 
 ---
 
@@ -34,13 +31,23 @@
 
 ---
 
-## ✅ Done Today
+## ✅ Done Today (2026-02-15)
 
-- [x] @vex: Ran self-audit using Opus 4.6 (health score 62/100)
-- [x] @vex: Removed broken Kimi K2.5 provider from config
-- [x] @vex: Cleaned up workspace (deleted temp_video/, removed gog skill, moved clawtex summaries)
-- [x] @vex: Consolidated memory logs into MEMORY.md (2026-02-03 through 2026-02-11)
-- [x] @vex: Moved mission-control to ~/repos/mission-control
+- [x] @vex: Fixed heartbeat configuration (Updated target to `channel:...`, increased Llama 3.2 3B context to 32k)
+- [x] @vex: Fixed model configuration mismatch (Updated openclaw.json: Sonnet 4.5 primary, GPT-5.2/Gemini fallbacks)
+- [x] @vex: Documented model configuration mismatch (see `notes/config-audit-2026-02-15.md`)
+- [x] @vex: Reviewed workspace git status weekly (verified clean, 596M total size)
+- [x] @vex: Archived old audit file (security-audit-2026-02-08.md → archive/)
+- [x] @vex: Verified cleanup of mission-control/ from workspace
+- [x] @vex: Verified memory consolidation (Feb 3-11) completion
+
+## ✅ Done History
+
+- [x] (2026-02-12) @vex: Ran self-audit using Opus 4.6 (health score 62/100)
+- [x] (2026-02-12) @vex: Removed broken Kimi K2.5 provider from config
+- [x] (2026-02-12) @vex: Cleaned up workspace (deleted temp_video/, removed gog skill, moved clawtex summaries)
+- [x] (2026-02-12) @vex: Consolidated memory logs into MEMORY.md (2026-02-03 through 2026-02-11)
+- [x] (2026-02-12) @vex: Moved mission-control to ~/repos/mission-control
 
 ---
 
