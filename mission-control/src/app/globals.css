@@ -595,6 +595,23 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 0.6rem;
+  min-width: 0;
+}
+
+.mc-row > * {
+  min-width: 0;
+}
+
+.mc-row > .mc-pill {
+  flex-shrink: 0;
+}
+
+.mc-content-source-title,
+.mc-content-source-path {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mc-stack {
@@ -908,6 +925,14 @@ a {
   margin-bottom: 0;
 }
 
+.mc-route-layout > *,
+.mc-route-layout-kpi > *,
+.mc-route-layout-split > *,
+.mc-ops-operations > *,
+.mc-dual-stack > * {
+  min-height: 0;
+}
+
 .mc-route-panel {
   height: 100%;
   min-height: 0;
@@ -918,12 +943,17 @@ a {
 .mc-scroll-area {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 0.12rem;
 }
 
 .mc-scroll-area > .mc-table-wrap {
   min-height: 0;
+}
+
+.mc-scroll-list {
+  min-height: 100%;
 }
 
 .mc-ops-operations {

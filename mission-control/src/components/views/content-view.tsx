@@ -37,21 +37,23 @@ export default function ContentView() {
       </MissionPanel>
 
       <MissionPanel className="mc-route-panel" title="Recent Content Sources" subtitle="Latest docs from memory and notes">
-        <div className="mc-list mc-scroll-area">
-          {(pipeline?.recentItems || []).map((item) => (
-            <article className="mc-list-item" key={item.id}>
-              <div className="mc-row">
-                <p className="mc-list-title">{item.title}</p>
-                <MissionPill tone="neutral">{item.status}</MissionPill>
-              </div>
-              <p className="mc-list-sub">{item.sourcePath}</p>
-            </article>
-          ))}
-          {pipeline?.recentItems.length === 0 ? (
-            <article className="mc-list-item">
-              <p className="mc-list-sub">No content sources found in workspace memory/notes.</p>
-            </article>
-          ) : null}
+        <div className="mc-scroll-area">
+          <div className="mc-list mc-scroll-list">
+            {(pipeline?.recentItems || []).map((item) => (
+              <article className="mc-list-item mc-content-source-item" key={item.id}>
+                <div className="mc-row mc-content-source-row">
+                  <p className="mc-list-title mc-content-source-title">{item.title}</p>
+                  <MissionPill tone="neutral">{item.status}</MissionPill>
+                </div>
+                <p className="mc-list-sub mc-content-source-path">{item.sourcePath}</p>
+              </article>
+            ))}
+            {pipeline?.recentItems.length === 0 ? (
+              <article className="mc-list-item">
+                <p className="mc-list-sub">No content sources found in workspace memory/notes.</p>
+              </article>
+            ) : null}
+          </div>
         </div>
       </MissionPanel>
     </div>

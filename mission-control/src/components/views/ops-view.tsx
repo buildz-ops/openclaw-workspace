@@ -148,61 +148,65 @@ export default function OpsView() {
 
       {tab === "tasks" ? (
         <MissionPanel className="mc-route-panel" title="Strategic Task Suggestion" subtitle="Real queue + tracker suggestions only">
-          <div className="mc-list mc-scroll-area">
-            {[...priorities, ...suggested].slice(0, 12).map((task) => (
-              <article className="mc-list-item" key={task.id}>
-                <div className="mc-row">
-                  <p className="mc-list-title">{task.title}</p>
-                  <div className="mc-row mc-pill-group">
-                    <MissionPill tone={task.priority === "high" ? "critical" : task.priority === "medium" ? "warn" : "neutral"}>
-                      {task.priority}
-                    </MissionPill>
-                    <MissionPill tone="info">{task.status}</MissionPill>
+          <div className="mc-scroll-area">
+            <div className="mc-list mc-scroll-list">
+              {[...priorities, ...suggested].slice(0, 12).map((task) => (
+                <article className="mc-list-item" key={task.id}>
+                  <div className="mc-row">
+                    <p className="mc-list-title">{task.title}</p>
+                    <div className="mc-row mc-pill-group">
+                      <MissionPill tone={task.priority === "high" ? "critical" : task.priority === "medium" ? "warn" : "neutral"}>
+                        {task.priority}
+                      </MissionPill>
+                      <MissionPill tone="info">{task.status}</MissionPill>
+                    </div>
                   </div>
-                </div>
-                <p className="mc-list-sub">{task.category}</p>
-                <div className="mc-button-row">
-                  <button type="button" className="mc-btn mc-btn-approve">
-                    Approve
-                  </button>
-                  <button type="button" className="mc-btn mc-btn-reject">
-                    Reject
-                  </button>
-                </div>
-              </article>
-            ))}
-            {priorities.length + suggested.length === 0 ? (
-              <article className="mc-list-item">
-                <p className="mc-list-sub">No tasks available from queue or tracker sources.</p>
-              </article>
-            ) : null}
+                  <p className="mc-list-sub">{task.category}</p>
+                  <div className="mc-button-row">
+                    <button type="button" className="mc-btn mc-btn-approve">
+                      Approve
+                    </button>
+                    <button type="button" className="mc-btn mc-btn-reject">
+                      Reject
+                    </button>
+                  </div>
+                </article>
+              ))}
+              {priorities.length + suggested.length === 0 ? (
+                <article className="mc-list-item">
+                  <p className="mc-list-sub">No tasks available from queue or tracker sources.</p>
+                </article>
+              ) : null}
+            </div>
           </div>
         </MissionPanel>
       ) : null}
 
       {tab === "calendar" ? (
         <MissionPanel className="mc-route-panel" title="Calendar Timeline" subtitle="Derived from queue priorities + heartbeat cadence">
-          <div className="mc-list mc-scroll-area">
-            {timeline.map((event) => (
-              <article className="mc-list-item" key={event.id}>
-                <div className="mc-row">
-                  <p className="mc-list-title">
-                    {event.timeLabel} · {event.title}
+          <div className="mc-scroll-area">
+            <div className="mc-list mc-scroll-list">
+              {timeline.map((event) => (
+                <article className="mc-list-item" key={event.id}>
+                  <div className="mc-row">
+                    <p className="mc-list-title">
+                      {event.timeLabel} · {event.title}
+                    </p>
+                    <MissionPill tone={event.priority === "high" ? "critical" : event.priority === "medium" ? "warn" : "ok"}>
+                      {event.priority}
+                    </MissionPill>
+                  </div>
+                  <p className="mc-list-sub">
+                    {event.owner} · {event.track}
                   </p>
-                  <MissionPill tone={event.priority === "high" ? "critical" : event.priority === "medium" ? "warn" : "ok"}>
-                    {event.priority}
-                  </MissionPill>
-                </div>
-                <p className="mc-list-sub">
-                  {event.owner} · {event.track}
-                </p>
-              </article>
-            ))}
-            {timeline.length === 0 ? (
-              <article className="mc-list-item">
-                <p className="mc-list-sub">No timeline events can be derived from current sources.</p>
-              </article>
-            ) : null}
+                </article>
+              ))}
+              {timeline.length === 0 ? (
+                <article className="mc-list-item">
+                  <p className="mc-list-sub">No timeline events can be derived from current sources.</p>
+                </article>
+              ) : null}
+            </div>
           </div>
         </MissionPanel>
       ) : null}

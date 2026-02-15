@@ -97,27 +97,29 @@ export default function KnowledgeView() {
       </MissionPanel>
 
       <MissionPanel className="mc-route-panel" title="Knowledge Documents" subtitle="Indexed from memory, notes, and learnings">
-        <div className="mc-list mc-scroll-area">
-          {filtered.map((doc) => (
-            <article className="mc-list-item" key={doc.id}>
-              <div className="mc-row">
-                <p className="mc-list-title">{doc.title}</p>
-                <div className="mc-row mc-pill-group">
-                  <MissionPill tone="neutral">{doc.category}</MissionPill>
-                  <MissionPill tone="info">{new Date(doc.modifiedAt).toLocaleDateString()}</MissionPill>
+        <div className="mc-scroll-area">
+          <div className="mc-list mc-scroll-list">
+            {filtered.map((doc) => (
+              <article className="mc-list-item" key={doc.id}>
+                <div className="mc-row">
+                  <p className="mc-list-title">{doc.title}</p>
+                  <div className="mc-row mc-pill-group">
+                    <MissionPill tone="neutral">{doc.category}</MissionPill>
+                    <MissionPill tone="info">{new Date(doc.modifiedAt).toLocaleDateString()}</MissionPill>
+                  </div>
                 </div>
-              </div>
-              <p className="mc-list-sub">{doc.path}</p>
-              <p className="mc-doc-excerpt">
-                {doc.excerpt || "No excerpt available."}
-              </p>
-            </article>
-          ))}
-          {filtered.length === 0 ? (
-            <article className="mc-list-item">
-              <p className="mc-list-sub">No documents match current filters.</p>
-            </article>
-          ) : null}
+                <p className="mc-list-sub">{doc.path}</p>
+                <p className="mc-doc-excerpt">
+                  {doc.excerpt || "No excerpt available."}
+                </p>
+              </article>
+            ))}
+            {filtered.length === 0 ? (
+              <article className="mc-list-item">
+                <p className="mc-list-sub">No documents match current filters.</p>
+              </article>
+            ) : null}
+          </div>
         </div>
       </MissionPanel>
     </div>

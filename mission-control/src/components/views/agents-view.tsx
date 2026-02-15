@@ -99,25 +99,27 @@ export default function AgentsView() {
 
       {tab === "agents" ? (
         <MissionPanel className="mc-route-panel" title="Agent Runtime" subtitle="Derived from session and OpenClaw config">
-          <div className="mc-list mc-scroll-area">
-            {agents.map((agent) => (
-              <article key={agent.id} className="mc-list-item">
-                <div className="mc-row">
-                  <p className="mc-list-title">{agent.name}</p>
-                  <MissionPill tone={agent.status === "active" ? "ok" : agent.status === "idle" ? "warn" : "critical"}>
-                    {agent.status}
-                  </MissionPill>
-                </div>
-                <p className="mc-list-sub">
-                  {agent.role} · {agent.model}
-                </p>
-              </article>
-            ))}
-            {agents.length === 0 ? (
-              <article className="mc-list-item">
-                <p className="mc-list-sub">No agent source data available.</p>
-              </article>
-            ) : null}
+          <div className="mc-scroll-area">
+            <div className="mc-list mc-scroll-list">
+              {agents.map((agent) => (
+                <article key={agent.id} className="mc-list-item">
+                  <div className="mc-row">
+                    <p className="mc-list-title">{agent.name}</p>
+                    <MissionPill tone={agent.status === "active" ? "ok" : agent.status === "idle" ? "warn" : "critical"}>
+                      {agent.status}
+                    </MissionPill>
+                  </div>
+                  <p className="mc-list-sub">
+                    {agent.role} · {agent.model}
+                  </p>
+                </article>
+              ))}
+              {agents.length === 0 ? (
+                <article className="mc-list-item">
+                  <p className="mc-list-sub">No agent source data available.</p>
+                </article>
+              ) : null}
+            </div>
           </div>
         </MissionPanel>
       ) : null}
@@ -125,16 +127,18 @@ export default function AgentsView() {
       {tab === "models" ? (
         <section className="mc-dual-stack">
           <MissionPanel className="mc-route-panel" title="Task Routing" subtitle="Primary/fallback policy from OpenClaw config">
-            <div className="mc-list mc-scroll-area">
-              {(models?.routing || []).map((route) => (
-                <article className="mc-list-item" key={route.task}>
-                  <div className="mc-row">
-                    <p className="mc-list-title">{route.task}</p>
-                    <MissionPill tone="info">{route.primary}</MissionPill>
-                  </div>
-                  <p className="mc-list-sub">Fallback: {route.fallback || "none"}</p>
-                </article>
-              ))}
+            <div className="mc-scroll-area">
+              <div className="mc-list mc-scroll-list">
+                {(models?.routing || []).map((route) => (
+                  <article className="mc-list-item" key={route.task}>
+                    <div className="mc-row">
+                      <p className="mc-list-title">{route.task}</p>
+                      <MissionPill tone="info">{route.primary}</MissionPill>
+                    </div>
+                    <p className="mc-list-sub">Fallback: {route.fallback || "none"}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </MissionPanel>
 
