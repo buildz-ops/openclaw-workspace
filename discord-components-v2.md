@@ -1,7 +1,18 @@
 # Discord Components v2 Reference
 
+## ⚠️ STATUS: BROKEN IN v2026.2.15
+**Known Issue:** [#18161](https://github.com/openclaw/openclaw/issues/18161) — The `message` tool silently drops the `components` field before sending to Discord. Components v2 is **non-functional** in this version.
+
+**Additional Issues:**
+- [#18145](https://github.com/openclaw/openclaw/issues/18145) — Select menus fail with "unknown component" errors even if #18161 is fixed
+- Buttons and modals may work after #18161 is patched
+
+**Wait for v2026.2.16+ before using this feature.**
+
+---
+
 ## Overview
-OpenClaw v2026.2.15+ supports Discord Components v2 for interactive UI (buttons, selects, modals, media galleries).
+OpenClaw v2026.2.15+ documents Discord Components v2 for interactive UI (buttons, selects, modals, media galleries), but the feature is currently broken.
 
 ## Usage
 Call the `message` tool with a `components` payload. Interactions route back as normal inbound messages.

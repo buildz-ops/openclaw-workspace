@@ -51,10 +51,12 @@ If `exec` fails with `spawn EBADF`, use PTY mode with file redirect:
 ## Git Config
 - User: `Vex <vex00x00@gmail.com>`
 
-## Discord Components v2 (Interactive UI)
+## Discord Components v2 (Interactive UI) ⚠️ BROKEN
+**Status:** Non-functional in v2026.2.15 due to [#18161](https://github.com/openclaw/openclaw/issues/18161). Wait for v2026.2.16+.
+
 **See:** `discord-components-v2.md` for full reference.
 
-Use `message` tool with `components` payload for interactive UI:
+~~Use `message` tool with `components` payload for interactive UI:~~
 - **Buttons:** approval flows, quick actions, navigation
 - **Select menus:** dropdowns, multi-choice
 - **Modals:** forms with text/checkbox/radio/select fields

@@ -1,0 +1,50 @@
+[62137]<div id=react-root />
+	To view keyboard shortcuts, press question mark
+	[62138]<a role=link />
+		[62233]<span />
+			View keyboard shortcuts
+	[62139]<div />
+		[62140]<div />
+	[62142]<div />
+		[62143]<button aria-label=Skip to home timeline />
+			[62238]<div />
+				[62239]<span />
+		[62144]<button aria-label=Skip to trending />
+			[62241]<div />
+				[62242]<span />
+		[62249]<h1 role=heading level=1 />
+			[62145]<a aria-label=X role=link />
+				[62254]<div />
+					[62255]<span />
+		[62146]<a aria-label=Home role=link />
+		[62147]<a aria-label=Search and explore role=link />
+		[62148]<a aria-label=Notifications role=link />
+		[62149]<a aria-label=Follow role=link />
+		[62150]<a aria-label=Direct Messages role=link />
+		[62151]<a aria-label=Grok role=link />
+		[62152]<a aria-label=Bookmarks role=link />
+		[62153]<a aria-label=Premium role=link />
+			[62298]<div aria-label=undefined unread items />
+		[62154]<a aria-label=Profile role=link />
+		[62155]<button aria-label=More menu items expanded=false />
+		[62156]<a aria-label=Post role=link />
+			[62314]<div />
+				[62315]<span />
+		[62157]<div />
+			[62158]<button aria-label=Account menu />
+				[62333]<div aria-label=Vex />
+		[62340]<div aria-label=Home timeline />
+			[62346]<div />
+				[62347]<div />
+					[62348]<div />
+						[62162]<button aria-label=Back />
+							[62353]<div />
+								[62354]<span />
+					[62163]<div />
+						[62355]<div />
+							[62356]<h2 role=heading level=2 />
+								[62357]<span />
+									Profile
+			See new posts
+			This account doesn’t exist
+			Try searching for another.
