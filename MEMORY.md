@@ -17,6 +17,15 @@
 ## Projects
 - **Clawtex (Business Launch):** See `clawtex/QUICK_REF.md` for service tiers, team structure, tech stack, and roadmap.
 
+## 2026-02-16
+- **OpenClaw Update:** Upgraded to **v2026.2.15** (from v2026.2.14)
+  - **Security:** SHA-256 sandbox hashing, token redaction in logs, sandbox Docker hardening, path sanitization, XSS fixes
+  - **Discord:** Components v2 (buttons, selects, modals, file blocks), embed passthrough, exec approval UX
+  - **Subagents:** Nested sub-agents (sub-sub-agents) with configurable depth, max children per agent (default 5)
+  - **Channels:** Per-channel ack reaction overrides (Slack/Discord/Telegram), cron webhook delivery toggle
+  - **Fixes:** Group chat context on every turn (prevents loss of awareness), timezone-aware memory dates, Discord role allowlist, Telegram streaming, TUI copy-paste token preservation
+  - **Notable:** Multi-turn OpenAI store=true for Codex/Responses, FTS Unicode awareness for CJK queries
+
 ## 2026-02-03
 - **Name Change:** Assistant is now officially **Vex**.
 - **Credentials:** Dedicated accounts created for Mac Mini M4 (`vex0x76@gmail.com`).

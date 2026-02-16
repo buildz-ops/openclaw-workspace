@@ -10,7 +10,7 @@
 *(empty)*
 
 ### Medium Priority
-- [ ] Update IDENTITY.md (generate avatar - open feature request since Feb 8)
+*(empty)*
 
 ### Low Priority
 *(empty)*
@@ -29,7 +29,11 @@
 
 ---
 
-## ✅ Done Today (2026-02-15)
+## ✅ Done Today (2026-02-16)
+
+- [x] @vex: Created avatar for IDENTITY.md (SVG: dark/electric blue lightning bolt)
+
+## ✅ Done Yesterday (2026-02-15)
 
 - [x] @vex: Added cost/usage tracking (scripts/log-session-cost.js + scripts/track-costs.sh, integrated into HEARTBEAT.md recurring checks)
 - [x] @vex: Reduced watchdog cron frequency (5m → 15m) to save tokens

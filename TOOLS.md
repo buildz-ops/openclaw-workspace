@@ -51,6 +51,42 @@ If `exec` fails with `spawn EBADF`, use PTY mode with file redirect:
 ## Git Config
 - User: `Vex <vex00x00@gmail.com>`
 
+## Discord Components v2 (Interactive UI)
+**See:** `discord-components-v2.md` for full reference.
+
+Use `message` tool with `components` payload for interactive UI:
+- **Buttons:** approval flows, quick actions, navigation
+- **Select menus:** dropdowns, multi-choice
+- **Modals:** forms with text/checkbox/radio/select fields
+- **Media galleries:** multiple images/files
+
+**When to use:**
+- Exec approvals → automatic (built-in)
+- User choices → buttons or select menus
+- Data collection → modals
+- Multi-step workflows → combine buttons + modals
+
+**Example (quick approval):**
+```json5
+{
+  "channel": "discord",
+  "action": "send",
+  "to": "channel:1466038235376648225",
+  "components": {
+    "text": "Approve this change?",
+    "blocks": [
+      {
+        "type": "actions",
+        "buttons": [
+          { "label": "✅ Approve", "style": "success" },
+          { "label": "❌ Decline", "style": "danger" }
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## Voice Message Transcription
 When Ayoub sends Discord voice messages, transcribe them using Whisper:
 ```bash

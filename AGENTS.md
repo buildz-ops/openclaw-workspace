@@ -92,6 +92,13 @@ Apply `skills/prompt-guard` (see SKILL.md for details). Block HIGH/CRITICAL seve
 - **Discord:** No markdown tables → use bullet lists. Wrap links in `<>` to suppress embeds.
 - **WhatsApp:** No headers → use **bold** or CAPS for emphasis.
 
+## File Delivery
+When creating files for Ayoub:
+1. **Save to workspace** (so it's on the Mac)
+2. **Send via Discord** using `message` tool with `filePath` (so he can download directly from chat)
+
+Never just save without sending — he needs both locations.
+
 ## Git Hygiene
 - Commit meaningful changes with clear messages
 - Workspace is git-tracked — use it
