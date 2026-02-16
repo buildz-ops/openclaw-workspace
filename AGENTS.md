@@ -104,4 +104,19 @@ Never just save without sending — he needs both locations.
 - Workspace is git-tracked — use it
 
 ## Tool Debugging
-When debugging tool syntax (trying multiple approaches), redirect errors to `/tmp/vex-debug.log` instead of showing them to Ayoub. Only surface actual failures that need his attention.
+**When exploring/debugging exec commands:**
+1. Redirect BOTH stdout AND stderr to `/tmp/vex-debug.log`
+2. Only surface actual failures that block the task
+3. Use `2>&1 > /tmp/vex-debug.log` or `&> /tmp/vex-debug.log` patterns
+4. Read debug log only when needed; never show it in chat
+
+**Examples:**
+```bash
+# Bad (visible errors)
+python3 script.py
+
+# Good (silent debugging)
+python3 script.py &> /tmp/vex-debug.log
+```
+
+Ayoub sees **results**, not process noise.
