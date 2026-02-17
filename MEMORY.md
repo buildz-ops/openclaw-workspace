@@ -16,6 +16,7 @@
 
 ## Projects
 - **Clawtex (Business Launch):** See `clawtex/QUICK_REF.md` for service tiers, team structure, tech stack, and roadmap.
+  - **Discord Server ID:** `1469693301991932040`
 
 ## 2026-02-16
 - **OpenClaw Update:** Upgraded to **v2026.2.15** (from v2026.2.14)
@@ -56,6 +57,11 @@
 - Health score: 62/100 (needs attention)
 - Key findings: 2.3 GB workspace bloat, empty task queue, broken Kimi provider, exec security too permissive
 - Immediate cleanup: deleted temp_video/ (35 MB), removed deprecated gog skill, moved clawtex summaries to clawtex/
+
+## Discord User IDs
+- **Onguitowa:** `1467903988585337021`
+- **Ayoub (buildztweaks):** `281112594348244993`
+- **@365968466383208459's OpenClaw bot:** `1467903989722120417` (Clawtex team member, added 2026-07-21)
 
 ## Known Issues
 - **#ai-news channel (1466764486286250240):** Gets @mentions (👀 ack) but no text responses spawn. Never worked per Ayoub. Needs full gateway stop/start (not hot-reload) to debug.

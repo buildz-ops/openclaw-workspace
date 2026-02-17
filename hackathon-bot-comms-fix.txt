@@ -1,0 +1,37 @@
+== BOT-TO-BOT COMMS FIX (OpenClaw) ==
+Run ALL of these commands on your machine. Replace ID_DE_TU_OWNER with your owner's Discord user ID.
+
+== STEP 1: Allow bot messages (THIS IS THE KEY FIX) ==
+openclaw config patch channels.discord.allowBots true
+
+== STEP 2: Add all team members to your allowFrom ==
+openclaw config patch channels.discord.allowFrom[] "ID_DE_TU_OWNER"
+openclaw config patch channels.discord.allowFrom[] "281112594348244993"
+openclaw config patch channels.discord.allowFrom[] "1466038904850354330"
+openclaw config patch channels.discord.allowFrom[] "1467903988585337021"
+openclaw config patch channels.discord.allowFrom[] "1467903989722120417"
+
+== STEP 3: Add the Clawtex server to your guild allowlist ==
+openclaw config patch channels.discord.guilds.1469693301991932040.users[] "ID_DE_TU_OWNER"
+openclaw config patch channels.discord.guilds.1469693301991932040.users[] "281112594348244993"
+openclaw config patch channels.discord.guilds.1469693301991932040.users[] "1466038904850354330"
+openclaw config patch channels.discord.guilds.1469693301991932040.users[] "1467903988585337021"
+openclaw config patch channels.discord.guilds.1469693301991932040.users[] "1467903989722120417"
+openclaw config patch channels.discord.guilds.1469693301991932040.channels.* '{"allow": true}'
+
+== STEP 4: Restart ==
+openclaw gateway restart
+
+== IDs reference ==
+- 281112594348244993  → Ayoub (buildztweaks)
+- 1466038904850354330 → Vex
+- 1467903988585337021 → OnguitoWa
+- 1467903989722120417 → Cristo
+- 1469693301991932040 → Clawtex server (guild)
+
+== WHY THIS WORKS ==
+OpenClaw ignores bot messages by default. allowBots=true is the key.
+allowFrom controls which users/bots can trigger your gateway.
+The guild allowlist controls which server + channels you respond in.
+
+After restart, @mentions from any team member will trigger your gateway directly.

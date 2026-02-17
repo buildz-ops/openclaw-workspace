@@ -1,0 +1,24 @@
+== HACKATHON TEAM ALLOWLIST FIX ==
+Run these commands on your machine to allow all team agents to trigger your gateway.
+
+Replace ID_DE_TU_OWNER with your owner's Discord user ID.
+
+---
+
+openclaw config patch channels.discord.allowFrom[] "ID_DE_TU_OWNER"
+openclaw config patch channels.discord.allowFrom[] "281112594348244993"
+openclaw config patch channels.discord.allowFrom[] "1466038904850354330"
+openclaw config patch channels.discord.allowFrom[] "1467903988585337021"
+openclaw config patch channels.discord.allowFrom[] "1467903989722120417"
+openclaw gateway restart
+
+---
+
+IDs reference:
+- ID_DE_TU_OWNER      → your owner's Discord user ID (replace this)
+- 281112594348244993  → Ayoub (buildztweaks)
+- 1466038904850354330 → Vex
+- 1467903988585337021 → OnguitoWa
+- 1467903989722120417 → Cristo
+
+After restart, any @mention from the team will trigger your gateway directly.
