@@ -6,9 +6,9 @@
 
 ### 2026-02-09: Mission Control Dashboard Built
 **Decision:** Built full Tauri + Next.js dashboard for OpenClaw monitoring  
-**Status:** 🏆 On hold (showcase potential)  
-**Follow-up date:** TBD (kept for potential future use)  
-**Review:** 2 .app builds exist (Mac Mini + MacBook via Tailscale). Keeping for demo/showcase purposes.
+**Status:** 🏆 Source only (no builds)  
+**Follow-up date:** TBD  
+**Review:** Source exists at mission-control/, can be rebuilt anytime with `npm run tauri build`. No .app binaries currently.
 
 ### 2026-02-11: X Account Seed List Complete
 **Decision:** Completed 44-account seed list for @vex00x00, switched to organic curation  
