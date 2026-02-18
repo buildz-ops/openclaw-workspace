@@ -6,15 +6,15 @@
 
 ### 2026-02-09: Mission Control Dashboard Built
 **Decision:** Built full Tauri + Next.js dashboard for OpenClaw monitoring  
-**Status:** Complete (2 .app builds created)  
-**Follow-up date:** 2026-02-16  
-**Review:** Has Ayoub used it? Any issues? Worth maintaining?
+**Status:** 🏆 On hold (showcase potential)  
+**Follow-up date:** TBD (kept for potential future use)  
+**Review:** 2 .app builds exist (Mac Mini + MacBook via Tailscale). Keeping for demo/showcase purposes.
 
 ### 2026-02-11: X Account Seed List Complete
 **Decision:** Completed 44-account seed list for @vex00x00, switched to organic curation  
-**Status:** Active (Ayoub curates feed manually)  
-**Follow-up date:** 2026-02-18  
-**Review:** Is the feed high-signal? Newsletter quality good? Growth strategy working?
+**Status:** ✅ Complete  
+**Follow-up date:** 2026-02-18 (reviewed 2026-02-18)  
+**Review:** Seed list done, Ayoub curating feed manually. Newsletter running daily @ 21:00 CET.
 
 ### 2026-02-08: Mac Mini M4 Setup
 **Decision:** Dedicated Mac Mini as always-on OpenClaw host  
